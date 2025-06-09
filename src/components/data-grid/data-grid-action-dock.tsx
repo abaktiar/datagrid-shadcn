@@ -36,7 +36,7 @@ export function DataGridActionDock() {
   };
 
   return (
-    <div className='absolute -top-20 left-1/2 transform -translate-x-1/2 z-50 animate-in slide-in-from-bottom-2 duration-300'>
+    <div className='absolute -top-2 left-1/2 transform -translate-x-1/2 z-50 animate-in slide-in-from-bottom-2 duration-300'>
       <div className='flex items-center gap-1 px-3 py-2 bg-background/95 backdrop-blur-md border border-border/50 rounded-2xl shadow-lg shadow-black/10 dark:shadow-black/20'>
         {/* Selection Info */}
         <div className='flex items-center gap-2 px-3 py-1.5 bg-muted/50 rounded-xl'>
