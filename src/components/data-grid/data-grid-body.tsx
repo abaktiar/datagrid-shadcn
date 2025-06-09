@@ -118,10 +118,13 @@ export function DataGridBody({ enableVirtualization = false, estimateSize = 35 }
                     role='gridcell'
                     className={cn(
                       'p-4 align-middle [&:has([role=checkbox])]:pr-0',
-                      cell.column.id === 'select' && 'w-12'
+                      cell.column.id === 'select' && 'w-12',
+                      'transition-all duration-200 ease-in-out'
                     )}
                     style={{
-                      width: cell.column.getSize() !== 150 ? cell.column.getSize() : undefined,
+                      width: cell.column.getSize(),
+                      minWidth: cell.column.columnDef.minSize || 50,
+                      maxWidth: cell.column.columnDef.maxSize || 500,
                     }}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
@@ -164,9 +167,15 @@ export function DataGridBody({ enableVirtualization = false, estimateSize = 35 }
               }}>
               <td
                 role='gridcell'
-                className={cn('p-4 align-middle [&:has([role=checkbox])]:pr-0', cell.column.id === 'select' && 'w-12')}
+                className={cn(
+                  'p-4 align-middle [&:has([role=checkbox])]:pr-0',
+                  cell.column.id === 'select' && 'w-12',
+                  'transition-all duration-200 ease-in-out'
+                )}
                 style={{
-                  width: cell.column.getSize() !== 150 ? cell.column.getSize() : undefined,
+                  width: cell.column.getSize(),
+                  minWidth: cell.column.columnDef.minSize || 50,
+                  maxWidth: cell.column.columnDef.maxSize || 500,
                 }}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </td>

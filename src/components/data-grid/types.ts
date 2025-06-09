@@ -26,52 +26,56 @@ export interface DataGridAction<TData> {
 }
 
 export interface DataGridProps<TData> {
-  data: TData[]
-  columns: DataGridColumn<TData>[]
-  
+  data: TData[];
+  columns: DataGridColumn<TData>[];
+
   // Selection
-  enableRowSelection?: boolean
-  enableMultiRowSelection?: boolean
-  onRowSelectionChange?: (selectedRows: Row<TData>[]) => void
-  
+  enableRowSelection?: boolean;
+  enableMultiRowSelection?: boolean;
+  onRowSelectionChange?: (selectedRows: Row<TData>[]) => void;
+
   // Actions
-  actions?: DataGridAction<TData>[]
-  
+  actions?: DataGridAction<TData>[];
+
   // Pagination
-  enablePagination?: boolean
-  pageSize?: number
-  pageSizeOptions?: number[]
-  manualPagination?: boolean
-  pageCount?: number
-  onPaginationChange?: (pageIndex: number, pageSize: number) => void
-  
+  enablePagination?: boolean;
+  pageSize?: number;
+  pageSizeOptions?: number[];
+  manualPagination?: boolean;
+  pageCount?: number;
+  onPaginationChange?: (pageIndex: number, pageSize: number) => void;
+
   // Sorting
-  enableSorting?: boolean
-  enableMultiSort?: boolean
-  manualSorting?: boolean
-  onSortingChange?: (sorting: any[]) => void
-  
+  enableSorting?: boolean;
+  enableMultiSort?: boolean;
+  manualSorting?: boolean;
+  onSortingChange?: (sorting: any[]) => void;
+
   // Filtering
-  enableGlobalFilter?: boolean
-  enableColumnFilters?: boolean
-  manualFiltering?: boolean
-  onGlobalFilterChange?: (globalFilter: string) => void
-  onColumnFiltersChange?: (columnFilters: any[]) => void
-  
+  enableGlobalFilter?: boolean;
+  enableColumnFilters?: boolean;
+  manualFiltering?: boolean;
+  onGlobalFilterChange?: (globalFilter: string) => void;
+  onColumnFiltersChange?: (columnFilters: any[]) => void;
+
+  // Column resizing
+  enableColumnResizing?: boolean;
+  onColumnSizingChange?: (columnSizing: Record<string, number>) => void;
+
   // Virtualization
-  enableVirtualization?: boolean
-  estimateSize?: number
-  
+  enableVirtualization?: boolean;
+  estimateSize?: number;
+
   // Loading & Error states
-  isLoading?: boolean
-  error?: string | null
-  
+  isLoading?: boolean;
+  error?: string | null;
+
   // Styling
-  className?: string
-  
+  className?: string;
+
   // Accessibility
-  'aria-label'?: string
-  'aria-describedby'?: string
+  'aria-label'?: string;
+  'aria-describedby'?: string;
 }
 
 export interface DataGridState {

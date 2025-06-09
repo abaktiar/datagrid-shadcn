@@ -43,6 +43,8 @@ export function DataGrid<TData>({
   manualFiltering = false,
   onGlobalFilterChange,
   onColumnFiltersChange,
+  enableColumnResizing = true,
+  onColumnSizingChange,
   enableVirtualization = false,
   estimateSize = 35,
   isLoading = false,
@@ -52,52 +54,53 @@ export function DataGrid<TData>({
   'aria-describedby': ariaDescribedBy,
 }: DataGridProps<TData>) {
   // State management
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-  const [globalFilter, setGlobalFilter] = useState('')
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [columnSizing, setColumnSizing] = useState<Record<string, number>>({});
+  const [globalFilter, setGlobalFilter] = useState('');
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize,
-  })
+  });
 
   // Enhanced columns with selection column if needed
   const enhancedColumns = useMemo(() => {
-    const cols = [...columns]
-    
+    const cols = [...columns];
+
     if (enableRowSelection) {
       cols.unshift({
         id: 'select',
         header: ({ table }) => (
           <input
-            type="checkbox"
+            type='checkbox'
             checked={table.getIsAllPageRowsSelected()}
             ref={(el) => {
-              if (el) el.indeterminate = table.getIsSomePageRowsSelected()
+              if (el) el.indeterminate = table.getIsSomePageRowsSelected();
             }}
             onChange={table.getToggleAllPageRowsSelectedHandler()}
-            aria-label="Select all rows"
-            className="rounded border-input"
+            aria-label='Select all rows'
+            className='rounded border-input'
           />
         ),
         cell: ({ row }) => (
           <input
-            type="checkbox"
+            type='checkbox'
             checked={row.getIsSelected()}
             onChange={row.getToggleSelectedHandler()}
             aria-label={`Select row ${row.index + 1}`}
-            className="rounded border-input"
+            className='rounded border-input'
           />
         ),
         enableSorting: false,
         enableHiding: false,
         size: 40,
-      })
+      });
     }
-    
-    return cols
-  }, [columns, enableRowSelection])
+
+    return cols;
+  }, [columns, enableRowSelection]);
 
   // Table instance
   const table = useReactTable({
@@ -108,20 +111,24 @@ export function DataGrid<TData>({
       sorting,
       columnFilters,
       columnVisibility,
+      columnSizing,
       globalFilter,
       pagination,
     },
     enableRowSelection,
     enableMultiRowSelection,
+    enableColumnResizing,
+    columnResizeMode: 'onChange',
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
+    onColumnSizingChange: setColumnSizing,
     onGlobalFilterChange: setGlobalFilter,
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: enableSorting ? getSortedRowModel() : undefined,
-    getFilteredRowModel: (enableGlobalFilter || enableColumnFilters) ? getFilteredRowModel() : undefined,
+    getFilteredRowModel: enableGlobalFilter || enableColumnFilters ? getFilteredRowModel() : undefined,
     getPaginationRowModel: enablePagination ? getPaginationRowModel() : undefined,
     manualPagination,
     manualSorting,
@@ -129,44 +136,51 @@ export function DataGrid<TData>({
     pageCount: pageCount ?? -1,
     getRowId: (row, index) => {
       // Use a unique identifier if available, otherwise fall back to index
-      return (row as any).id?.toString() ?? index.toString()
+      return (row as any).id?.toString() ?? index.toString();
     },
-  })
+  });
 
   // Selected rows
   const selectedRows = useMemo(() => {
-    return table.getFilteredSelectedRowModel().rows
-  }, [table, rowSelection])
+    return table.getFilteredSelectedRowModel().rows;
+  }, [table, rowSelection]);
 
   // Context value
-  const contextValue: DataGridContextValue<TData> = useMemo(() => ({
-    table,
-    selectedRows,
-    actions,
-    isLoading,
-    error,
-  }), [table, selectedRows, actions, isLoading, error])
+  const contextValue: DataGridContextValue<TData> = useMemo(
+    () => ({
+      table,
+      selectedRows,
+      actions,
+      isLoading,
+      error,
+    }),
+    [table, selectedRows, actions, isLoading, error]
+  );
 
   // Handle external callbacks
   React.useEffect(() => {
-    onRowSelectionChange?.(selectedRows)
-  }, [selectedRows, onRowSelectionChange])
+    onRowSelectionChange?.(selectedRows);
+  }, [selectedRows, onRowSelectionChange]);
 
   React.useEffect(() => {
-    onSortingChange?.(sorting)
-  }, [sorting, onSortingChange])
+    onSortingChange?.(sorting);
+  }, [sorting, onSortingChange]);
 
   React.useEffect(() => {
-    onColumnFiltersChange?.(columnFilters)
-  }, [columnFilters, onColumnFiltersChange])
+    onColumnFiltersChange?.(columnFilters);
+  }, [columnFilters, onColumnFiltersChange]);
 
   React.useEffect(() => {
-    onGlobalFilterChange?.(globalFilter)
-  }, [globalFilter, onGlobalFilterChange])
+    onGlobalFilterChange?.(globalFilter);
+  }, [globalFilter, onGlobalFilterChange]);
 
   React.useEffect(() => {
-    onPaginationChange?.(pagination.pageIndex, pagination.pageSize)
-  }, [pagination, onPaginationChange])
+    onPaginationChange?.(pagination.pageIndex, pagination.pageSize);
+  }, [pagination, onPaginationChange]);
+
+  React.useEffect(() => {
+    onColumnSizingChange?.(columnSizing);
+  }, [columnSizing, onColumnSizingChange]);
 
   return (
     <DataGridContext.Provider value={contextValue}>
@@ -191,7 +205,11 @@ export function DataGrid<TData>({
             <table
               className='w-full caption-bottom text-sm'
               role='grid'
-              aria-rowcount={table.getRowModel().rows.length}>
+              aria-rowcount={table.getRowModel().rows.length}
+              style={{
+                width: table.getCenterTotalSize(),
+                transition: 'width 0.2s ease-in-out',
+              }}>
               <DataGridHeader />
               <DataGridBody enableVirtualization={enableVirtualization} estimateSize={estimateSize} />
             </table>

@@ -13,6 +13,10 @@ function App() {
         accessorKey: 'firstName',
         enableSorting: true,
         enableFiltering: true,
+        enableResizing: true,
+        size: 120,
+        minSize: 80,
+        maxSize: 200,
       },
       {
         id: 'lastName',
@@ -20,6 +24,10 @@ function App() {
         accessorKey: 'lastName',
         enableSorting: true,
         enableFiltering: true,
+        enableResizing: true,
+        size: 120,
+        minSize: 80,
+        maxSize: 200,
       },
       {
         id: 'email',
@@ -27,6 +35,10 @@ function App() {
         accessorKey: 'email',
         enableSorting: true,
         enableFiltering: true,
+        enableResizing: true,
+        size: 200,
+        minSize: 150,
+        maxSize: 300,
         cell: ({ row }) => (
           <div className='flex items-center space-x-2'>
             <Mail className='h-4 w-4 text-muted-foreground' />
@@ -40,6 +52,10 @@ function App() {
         accessorKey: 'role',
         enableSorting: true,
         enableFiltering: true,
+        enableResizing: true,
+        size: 100,
+        minSize: 80,
+        maxSize: 150,
         cell: ({ row }) => (
           <div className='flex items-center space-x-2'>
             <UserIcon className='h-4 w-4 text-muted-foreground' />
@@ -53,6 +69,10 @@ function App() {
         accessorKey: 'status',
         enableSorting: true,
         enableFiltering: true,
+        enableResizing: true,
+        size: 120,
+        minSize: 100,
+        maxSize: 150,
         cell: ({ row }) => {
           const status = row.original.status;
           const statusColors = {
@@ -73,6 +93,10 @@ function App() {
         header: 'Last Login',
         accessorKey: 'lastLogin',
         enableSorting: true,
+        enableResizing: true,
+        size: 140,
+        minSize: 120,
+        maxSize: 180,
         cell: ({ row }) => (
           <div className='flex items-center space-x-2'>
             <Calendar className='h-4 w-4 text-muted-foreground' />

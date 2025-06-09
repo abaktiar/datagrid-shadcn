@@ -50,12 +50,15 @@ export function DataGridHeader() {
                       : undefined
                   }
                   className={cn(
-                    'h-12 px-4 text-left align-middle font-medium text-muted-foreground',
+                    'h-12 px-4 text-left align-middle font-medium text-muted-foreground relative',
                     '[&:has([role=checkbox])]:pr-0',
-                    canSort && 'cursor-pointer select-none hover:bg-muted/50'
+                    canSort && 'cursor-pointer select-none hover:bg-muted/50',
+                    'transition-all duration-200 ease-in-out'
                   )}
                   style={{
-                    width: header.getSize() !== 150 ? header.getSize() : undefined,
+                    width: header.getSize(),
+                    minWidth: header.column.columnDef.minSize || 50,
+                    maxWidth: header.column.columnDef.maxSize || 500,
                   }}
                   onClick={canSort ? header.column.getToggleSortingHandler() : undefined}>
                   <div className='flex items-center space-x-2'>
@@ -82,12 +85,17 @@ export function DataGridHeader() {
                       onMouseDown={header.getResizeHandler()}
                       onTouchStart={header.getResizeHandler()}
                       className={cn(
-                        'absolute right-0 top-0 h-full w-1 cursor-col-resize select-none touch-none bg-transparent hover:bg-primary/20',
-                        header.column.getIsResizing() && 'bg-primary/50'
+                        'absolute right-0 top-0 h-full w-2 cursor-col-resize select-none touch-none',
+                        'bg-transparent hover:bg-primary/20 transition-all duration-200',
+                        'before:absolute before:left-1/2 before:top-0 before:h-full before:w-0.5',
+                        'before:bg-border before:transform before:-translate-x-1/2',
+                        'hover:before:bg-primary/60 hover:w-3',
+                        header.column.getIsResizing() && 'bg-primary/30 w-3 before:bg-primary'
                       )}
                       style={{
                         transform: 'translateX(50%)',
                       }}
+                      title={`Resize ${header.column.columnDef.header} column`}
                     />
                   )}
                 </th>
