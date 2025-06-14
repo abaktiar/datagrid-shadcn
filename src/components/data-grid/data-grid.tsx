@@ -215,15 +215,12 @@ export function DataGrid<TData>({
           </div>
         </div>
 
-        {/* Pagination and Action Dock Container */}
-        <div className='relative'>
-          {/* Pagination */}
-          {enablePagination && <DataGridPagination pageSizeOptions={pageSizeOptions} />}
-
-          {/* Action Dock - positioned near pagination */}
-          {enableRowSelection && selectedRows.length > 0 && actions.length > 0 && <DataGridActionDock />}
-        </div>
+        {/* Pagination */}
+        {enablePagination && <DataGridPagination pageSizeOptions={pageSizeOptions} />}
       </div>
+
+      {/* Fixed Bottom Action Dock */}
+      {enableRowSelection && selectedRows.length > 0 && actions.length > 0 && <DataGridActionDock />}
     </DataGridContext.Provider>
   );
 }
