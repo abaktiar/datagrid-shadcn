@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Background circle -->
+  <circle cx="16" cy="16" r="15" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+  
+  <!-- DataGrid table representation -->
+  <!-- Header row -->
+  <rect x="6" y="8" width="20" height="3" fill="#3b82f6" rx="1"/>
+  
+  <!-- Data rows -->
+  <rect x="6" y="12" width="20" height="2.5" fill="#64748b" rx="0.5"/>
+  <rect x="6" y="15.5" width="20" height="2.5" fill="#64748b" rx="0.5"/>
+  <rect x="6" y="19" width="20" height="2.5" fill="#64748b" rx="0.5"/>
+  <rect x="6" y="22.5" width="20" height="2.5" fill="#64748b" rx="0.5"/>
+  
+  <!-- Column dividers -->
+  <line x1="12" y1="8" x2="12" y2="25" stroke="#475569" stroke-width="0.5"/>
+  <line x1="18" y1="8" x2="18" y2="25" stroke="#475569" stroke-width="0.5"/>
+  <line x1="24" y1="8" x2="24" y2="25" stroke="#475569" stroke-width="0.5"/>
+  
+  <!-- Selection indicator (checkbox style) -->
+  <rect x="7" y="12.5" width="1.5" height="1.5" fill="#10b981" rx="0.2"/>
+  <rect x="7" y="16" width="1.5" height="1.5" fill="#10b981" rx="0.2"/>
+  
+  <!-- Sort indicator (small arrow) -->
+  <polygon points="24.5,9 25.5,9 25,8.2" fill="#60a5fa"/>
+</svg>
