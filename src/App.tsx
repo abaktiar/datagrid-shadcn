@@ -710,9 +710,10 @@ function App() {
         </div>
 
         {/* Footer */}
-        <footer className='mt-16 py-2 border-t'>
+        <footer className='mt-16 py-6 border-t'> {/* Increased padding */}
           <div className='max-w-4xl mx-auto px-4'>
-            <div className='flex flex-col md:flex-row items-center justify-between gap-4'>
+            {/* Changed justify-between to justify-center */}
+            <div className='flex flex-col md:flex-row items-center justify-center gap-4'>
               <div className='flex items-center gap-2 text-sm text-muted-foreground'>
                 <span>Built with</span>
                 <Heart className='h-4 w-4 text-red-500 fill-current' />

@@ -115,7 +115,7 @@ export function DataGridBody({ enableVirtualization = false, estimateSize = 35 }
               aria-selected={row.getIsSelected()}
               className={cn(
                 'border-b border-border hover:bg-muted/30', // Base styling
-                row.getIsSelected() && 'bg-accent/60 dark:bg-accent/60 text-accent-foreground' // New style for selected rows
+                row.getIsSelected() && 'bg-blue-50 text-slate-900 dark:bg-accent/60 dark:text-accent-foreground' // New distinct styles
               )}
               style={{
                 position: 'absolute',
@@ -165,7 +165,7 @@ export function DataGridBody({ enableVirtualization = false, estimateSize = 35 }
           aria-selected={row.getIsSelected()}
           className={cn(
             'border-b border-border hover:bg-muted/30', // Base styling
-            row.getIsSelected() && 'bg-accent/60 dark:bg-accent/60 text-accent-foreground' // New style for selected rows
+            row.getIsSelected() && 'bg-blue-50 text-slate-900 dark:bg-accent/60 dark:text-accent-foreground' // New distinct styles
           )}>
           {row.getVisibleCells().map((cell) => (
             <CellContextMenu
