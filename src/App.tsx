@@ -14,9 +14,9 @@ function App() {
         enableSorting: true,
         enableFiltering: true,
         enableResizing: true,
-        size: 120,
-        minSize: 80,
-        maxSize: 200,
+        // size: 120,
+        // minSize: 80,
+        // maxSize: 200,
       },
       {
         id: 'lastName',
@@ -37,8 +37,8 @@ function App() {
         enableFiltering: true,
         enableResizing: true,
         size: 200,
-        minSize: 150,
-        maxSize: 300,
+        minSize: 50,
+        maxSize: 500,
         cell: ({ row }) => (
           <div className='flex items-center space-x-2'>
             <Mail className='h-4 w-4 text-muted-foreground' />

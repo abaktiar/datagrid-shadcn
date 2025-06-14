@@ -52,8 +52,7 @@ export function DataGridHeader() {
                   className={cn(
                     'h-12 px-4 text-left align-middle font-medium text-muted-foreground relative',
                     '[&:has([role=checkbox])]:pr-0',
-                    canSort && 'cursor-pointer select-none hover:bg-muted/50',
-                    'transition-all duration-200 ease-in-out'
+                    canSort && 'cursor-pointer select-none hover:bg-muted/50'
                   )}
                   style={{
                     width: header.getSize(),
@@ -86,9 +85,9 @@ export function DataGridHeader() {
                       onTouchStart={header.getResizeHandler()}
                       className={cn(
                         'absolute right-0 top-0 h-full w-2 cursor-col-resize select-none touch-none',
-                        'bg-transparent hover:bg-primary/20 transition-all duration-200',
+                        'bg-transparent hover:bg-primary/20 transition-colors duration-150',
                         'before:absolute before:left-1/2 before:top-0 before:h-full before:w-0.5',
-                        'before:bg-border before:transform before:-translate-x-1/2',
+                        'before:bg-border before:transform before:-translate-x-1/2 before:transition-colors before:duration-150',
                         'hover:before:bg-primary/60 hover:w-3',
                         header.column.getIsResizing() && 'bg-primary/30 w-3 before:bg-primary'
                       )}

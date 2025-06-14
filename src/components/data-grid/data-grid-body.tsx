@@ -118,8 +118,7 @@ export function DataGridBody({ enableVirtualization = false, estimateSize = 35 }
                     role='gridcell'
                     className={cn(
                       'p-4 align-middle [&:has([role=checkbox])]:pr-0',
-                      cell.column.id === 'select' && 'w-12',
-                      'transition-all duration-200 ease-in-out'
+                      cell.column.id === 'select' && 'w-12'
                     )}
                     style={{
                       width: cell.column.getSize(),
@@ -167,11 +166,7 @@ export function DataGridBody({ enableVirtualization = false, estimateSize = 35 }
               }}>
               <td
                 role='gridcell'
-                className={cn(
-                  'p-4 align-middle [&:has([role=checkbox])]:pr-0',
-                  cell.column.id === 'select' && 'w-12',
-                  'transition-all duration-200 ease-in-out'
-                )}
+                className={cn('p-4 align-middle [&:has([role=checkbox])]:pr-0', cell.column.id === 'select' && 'w-12')}
                 style={{
                   width: cell.column.getSize(),
                   minWidth: cell.column.columnDef.minSize || 50,

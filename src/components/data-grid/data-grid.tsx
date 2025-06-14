@@ -208,7 +208,6 @@ export function DataGrid<TData>({
               aria-rowcount={table.getRowModel().rows.length}
               style={{
                 width: table.getCenterTotalSize(),
-                transition: 'width 0.2s ease-in-out',
               }}>
               <DataGridHeader />
               <DataGridBody enableVirtualization={enableVirtualization} estimateSize={estimateSize} />
