@@ -728,16 +728,7 @@ function App() {
                 <span className='font-medium text-foreground'>AI✨</span>
               </div>
 
-              <div className='flex items-center gap-4'>
-                <a
-                  href='https://github.com/abaktiar/datagrid-shadcn'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-foreground bg-background border rounded-lg hover:bg-muted transition-colors'>
-                  <Github className='h-4 w-4' />
-                  View on GitHub
-                </a>
-              </div>
+              {/* The GitHub link previously here has been removed */}
             </div>
           </div>
         </footer>
