@@ -6,6 +6,8 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { cn } from '../../lib/utils';
 import { useDataGrid } from './context';
 import { CellContextMenu } from './data-grid-context-menu';
+import { EditableCell } from './data-grid-editable-cell';
+import { CellEditConfig } from './types';
 
 interface DataGridBodyProps {
   enableVirtualization?: boolean;
@@ -13,10 +15,32 @@ interface DataGridBodyProps {
 }
 
 export function DataGridBody({ enableVirtualization = false, estimateSize = 35 }: DataGridBodyProps) {
-  const { table, isLoading, error, cellContextMenuItems, enableCellContextMenu } = useDataGrid();
+  const { table, isLoading, error, cellContextMenuItems, enableCellContextMenu, enableCellEditing } = useDataGrid();
   const tableContainerRef = useRef<HTMLTableSectionElement>(null);
 
   const rows = table.getRowModel().rows;
+
+  // Helper function to render cell content
+  const renderCellContent = (cell: any) => {
+    const column = cell.column;
+    const row = cell.row;
+    const value = cell.getValue();
+
+    // Check if this column has editing enabled
+    const columnDef = column.columnDef as any;
+    const editConfig = columnDef.enableEditing;
+
+    if (enableCellEditing && editConfig) {
+      // Determine edit configuration
+      const config: CellEditConfig<any> =
+        typeof editConfig === 'boolean' ? { enabled: true } : { enabled: true, ...editConfig };
+
+      return <EditableCell row={row} column={column} value={value} editConfig={config} />;
+    }
+
+    // Default cell rendering
+    return flexRender(column.columnDef.cell, cell.getContext());
+  };
 
   // Virtualization setup
   const rowVirtualizer = useVirtualizer({
@@ -90,8 +114,8 @@ export function DataGridBody({ enableVirtualization = false, estimateSize = 35 }
               aria-rowindex={virtualItem.index + 2} // +2 because header is row 1
               aria-selected={row.getIsSelected()}
               className={cn(
-                'border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted',
-                row.getIsSelected() && 'bg-muted'
+                'border-b border-border hover:bg-muted/30 data-[state=selected]:bg-blue-50',
+                row.getIsSelected() && 'bg-blue-50 border-blue-200'
               )}
               style={{
                 position: 'absolute',
@@ -111,15 +135,15 @@ export function DataGridBody({ enableVirtualization = false, estimateSize = 35 }
                   <td
                     role='gridcell'
                     className={cn(
-                      'p-4 align-middle [&:has([role=checkbox])]:pr-0',
-                      cell.column.id === 'select' && 'w-12'
+                      'px-3 py-1.5 align-middle text-sm border-r border-border/50 [&:has([role=checkbox])]:pr-0',
+                      cell.column.id === 'select' && 'w-12 border-r-0'
                     )}
                     style={{
                       width: cell.column.getSize(),
                       minWidth: cell.column.columnDef.minSize || 50,
                       maxWidth: cell.column.columnDef.maxSize || 500,
                     }}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    {renderCellContent(cell)}
                   </td>
                 </CellContextMenu>
               ))}
@@ -140,8 +164,8 @@ export function DataGridBody({ enableVirtualization = false, estimateSize = 35 }
           aria-rowindex={row.index + 2} // +2 because header is row 1
           aria-selected={row.getIsSelected()}
           className={cn(
-            'border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted',
-            row.getIsSelected() && 'bg-muted'
+            'border-b border-border hover:bg-muted/30 data-[state=selected]:bg-blue-50',
+            row.getIsSelected() && 'bg-blue-50 border-blue-200'
           )}>
           {row.getVisibleCells().map((cell) => (
             <CellContextMenu
@@ -152,13 +176,17 @@ export function DataGridBody({ enableVirtualization = false, estimateSize = 35 }
               items={enableCellContextMenu ? cellContextMenuItems : []}>
               <td
                 role='gridcell'
-                className={cn('p-4 align-middle [&:has([role=checkbox])]:pr-0', cell.column.id === 'select' && 'w-12')}
+                className={cn(
+                  'px-3 py-1.5 align-middle text-sm border-r border-border/50 [&:has([role=checkbox])]:pr-0',
+                  cell.column.id === 'select' && 'w-12 border-r-0',
+                  cell.column.getIsResizing() && 'w-2 border-r-primary'
+                )}
                 style={{
                   width: cell.column.getSize(),
                   minWidth: cell.column.columnDef.minSize || 50,
                   maxWidth: cell.column.columnDef.maxSize || 500,
                 }}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                {renderCellContent(cell)}
               </td>
             </CellContextMenu>
           ))}

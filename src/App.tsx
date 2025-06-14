@@ -1,16 +1,15 @@
 import { useMemo, useState, useEffect, useCallback } from 'react';
+import { Trash2, Download, CheckCircle, Archive, Server, Monitor } from 'lucide-react';
 import {
-  Trash2,
-  Download,
-  CheckCircle,
-  Archive,
-  User as UserIcon,
-  Mail,
-  Calendar,
-  Server,
-  Monitor,
-} from 'lucide-react';
-import { DataGrid, DataGridColumn, DataGridAction, DataChangeParams } from './components/data-grid';
+  DataGrid,
+  DataGridColumn,
+  DataGridAction,
+  DataChangeParams,
+  TextEditInput,
+  createSelectEditComponent,
+  BehaviorBuilder,
+  EditBehaviors,
+} from './components/data-grid';
 import { Button } from './components/ui/button';
 import {
   copyCellItem,
@@ -33,13 +32,69 @@ import {
 } from './components/data-grid/context-menu-utils';
 import { sampleUsers, type User as UserType } from './data/sample-data';
 
+// Status options for the select dropdown
+const statusOptions = [
+  { value: 'active', label: 'Active' },
+  { value: 'inactive', label: 'Inactive' },
+  { value: 'pending', label: 'Pending' },
+];
+
+// Create status select component
+const StatusSelectInput = createSelectEditComponent<UserType>(statusOptions);
+
 function App() {
   // Demo state for server-side vs client-side
   const [isServerSide, setIsServerSide] = useState(false);
-  const [serverData, setServerData] = useState(sampleUsers.slice(0, 5)); // Start with first page
+  const [serverData, setServerData] = useState(sampleUsers.slice(0, 15)); // Start with first page
   const [totalCount, setTotalCount] = useState(sampleUsers.length);
-  const [pageCount, setPageCount] = useState(Math.ceil(sampleUsers.length / 5));
+  const [pageCount, setPageCount] = useState(Math.ceil(sampleUsers.length / 15));
   const [isLoading, setIsLoading] = useState(false);
+  const [clientData, setClientData] = useState(sampleUsers); // For client-side editing
+
+  // Handle cell editing
+  const handleCellEdit = useCallback(
+    async (value: any, row: any, column: any): Promise<boolean> => {
+      try {
+        console.log('Editing cell:', {
+          rowId: row.id,
+          columnId: column.id,
+          oldValue: row.original[column.accessorKey],
+          newValue: value,
+        });
+
+        // Simulate API call delay
+        await new Promise((resolve) => setTimeout(resolve, 300));
+
+        if (isServerSide) {
+          // Update server data
+          setServerData((prevData) =>
+            prevData.map((item) => (item.id === row.original.id ? { ...item, [column.accessorKey]: value } : item))
+          );
+        } else {
+          // Update client data
+          setClientData((prevData) =>
+            prevData.map((item) => (item.id === row.original.id ? { ...item, [column.accessorKey]: value } : item))
+          );
+        }
+
+        return true; // Success
+      } catch (error) {
+        console.error('Failed to save cell edit:', error);
+        return false; // Failure
+      }
+    },
+    [isServerSide]
+  );
+
+  // Handle cell edit errors
+  const handleCellEditError = useCallback((error: string, row: any, column: any) => {
+    console.error('Cell edit error:', error, {
+      user: `${row.original.firstName} ${row.original.lastName}`,
+      column: column.id,
+    });
+    // In a real app, you might show a toast notification here
+    alert(`Failed to save ${column.id}: ${error}`);
+  }, []);
 
   // Simulate server-side data fetching
   const handleDataChange = useCallback(async (params: DataChangeParams) => {
@@ -94,16 +149,16 @@ function App() {
     if (isServerSide) {
       // Trigger initial data load for server-side mode
       handleDataChange({
-        pagination: { pageIndex: 0, pageSize: 5 },
+        pagination: { pageIndex: 0, pageSize: 15 },
         sorting: [],
         filters: [],
         globalFilter: '',
       });
     } else {
       // Reset to client-side data
-      setServerData(sampleUsers.slice(0, 5));
+      setServerData(sampleUsers.slice(0, 15));
       setTotalCount(sampleUsers.length);
-      setPageCount(Math.ceil(sampleUsers.length / 5));
+      setPageCount(Math.ceil(sampleUsers.length / 15));
       setIsLoading(false); // Ensure loading is false for client-side
     }
   }, [isServerSide]);
@@ -113,59 +168,97 @@ function App() {
     () => [
       {
         id: 'firstName',
-        header: 'First Name',
+        header: 'First Name (Click)',
         accessorKey: 'firstName',
         enableSorting: true,
         enableFiltering: true,
         enableResizing: true,
-        // size: 120,
-        // minSize: 80,
-        // maxSize: 200,
+        enableEditing: {
+          enabled: true,
+          behavior: EditBehaviors.clickToEdit,
+          component: TextEditInput,
+          placeholder: 'Enter first name...',
+          validate: (value: string) => {
+            if (!value?.trim()) return 'First name is required';
+            if (value.length < 2) return 'First name must be at least 2 characters';
+            return null;
+          },
+        },
+        size: 140,
+        minSize: 100,
+        maxSize: 200,
       },
       {
         id: 'lastName',
-        header: 'Last Name',
+        header: 'Last Name (Blur)',
         accessorKey: 'lastName',
         enableSorting: true,
         enableFiltering: true,
         enableResizing: true,
-        size: 120,
-        minSize: 80,
+        enableEditing: {
+          enabled: true,
+          behavior: {
+            mode: 'click',
+            saveOn: ['blur'],
+            cancelOn: ['escape'],
+            showActionButtons: false,
+            autoFocus: true,
+            selectAllOnFocus: true,
+          },
+          component: TextEditInput,
+          placeholder: 'Enter last name...',
+          validate: (value: string) => {
+            if (!value?.trim()) return 'Last name is required';
+            return null;
+          },
+        },
+        size: 140,
+        minSize: 100,
         maxSize: 200,
       },
       {
         id: 'email',
-        header: 'Email',
+        header: 'Email (Click + Buttons)',
         accessorKey: 'email',
         enableSorting: true,
         enableFiltering: true,
         enableResizing: true,
-        size: 200,
-        minSize: 50,
-        maxSize: 500,
-        cell: ({ row }) => (
-          <div className='flex items-center space-x-2'>
-            <Mail className='h-4 w-4 text-muted-foreground' />
-            <span>{row.original.email}</span>
-          </div>
-        ),
+        enableEditing: {
+          enabled: true,
+          behavior: EditBehaviors.clickWithButtons,
+          component: TextEditInput,
+          placeholder: 'Enter email...',
+          validate: (value: string) => {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return value && !emailRegex.test(value) ? 'Invalid email format' : null;
+          },
+        },
+        size: 220,
+        minSize: 150,
+        maxSize: 300,
+        cell: ({ row }) => <span className='text-sm'>{row.original.email}</span>,
       },
       {
         id: 'role',
-        header: 'Role',
+        header: 'Role (Double-Click)',
         accessorKey: 'role',
         enableSorting: true,
         enableFiltering: true,
         enableResizing: true,
-        size: 100,
-        minSize: 80,
-        maxSize: 150,
-        cell: ({ row }) => (
-          <div className='flex items-center space-x-2'>
-            <UserIcon className='h-4 w-4 text-muted-foreground' />
-            <span className='font-medium'>{row.original.role}</span>
-          </div>
-        ),
+        enableEditing: {
+          enabled: true,
+          behavior: EditBehaviors.doubleClickToEdit,
+          component: createSelectEditComponent([
+            { value: 'Admin', label: 'Admin' },
+            { value: 'Editor', label: 'Editor' },
+            { value: 'Viewer', label: 'Viewer' },
+          ]),
+          placeholder: 'Select role...',
+        },
+        size: 150,
+        minSize: 120,
+        maxSize: 180,
+        cell: ({ row }) => <span className='text-sm font-medium'>{row.original.role}</span>,
       },
       {
         id: 'status',
@@ -174,6 +267,11 @@ function App() {
         enableSorting: true,
         enableFiltering: true,
         enableResizing: true,
+        enableEditing: {
+          enabled: true,
+          behavior: BehaviorBuilder.create().doubleClickToEdit().withActionButtons('bottom-right').build(),
+          component: StatusSelectInput,
+        },
         size: 120,
         minSize: 100,
         maxSize: 150,
@@ -201,11 +299,73 @@ function App() {
         size: 140,
         minSize: 120,
         maxSize: 180,
+        cell: ({ row }) => <span className='text-sm'>{new Date(row.original.lastLogin).toLocaleDateString()}</span>,
+      },
+      {
+        id: 'priority',
+        header: 'Priority',
+        accessorKey: 'priority',
+        enableSorting: true,
+        enableFiltering: true,
+        enableResizing: true,
+
+        size: 150,
+        minSize: 120,
+        maxSize: 180,
+        cell: ({ row }) => {
+          const priority = (row.original as any).priority || 'Medium';
+          const priorityColors = {
+            High: 'bg-red-100 text-red-800',
+            Medium: 'bg-yellow-100 text-yellow-800',
+            Low: 'bg-green-100 text-green-800',
+          };
+          return (
+            <span
+              className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                priorityColors[priority as keyof typeof priorityColors]
+              }`}>
+              {priority}
+            </span>
+          );
+        },
+      },
+      {
+        id: 'department',
+        header: 'Department',
+        accessorKey: 'department',
+        enableSorting: true,
+        enableFiltering: true,
+        enableResizing: true,
+        size: 120,
+        minSize: 100,
+        maxSize: 150,
+        cell: ({ row }) => <span className='text-sm'>{(row.original as any).department || 'Engineering'}</span>,
+      },
+      {
+        id: 'notes',
+        header: 'Notes (Enter to Save)',
+        accessorKey: 'notes',
+        enableSorting: false,
+        enableFiltering: true,
+        enableResizing: true,
+        enableEditing: {
+          enabled: true,
+          behavior: {
+            mode: 'click',
+            saveOn: ['enter'],
+            cancelOn: ['escape'],
+            showActionButtons: false,
+            autoFocus: true,
+            selectAllOnFocus: false,
+          },
+          component: TextEditInput,
+          placeholder: 'Add notes...',
+        },
+        size: 180,
+        minSize: 150,
+        maxSize: 300,
         cell: ({ row }) => (
-          <div className='flex items-center space-x-2'>
-            <Calendar className='h-4 w-4 text-muted-foreground' />
-            <span>{new Date(row.original.lastLogin).toLocaleDateString()}</span>
-          </div>
+          <span className='text-sm text-muted-foreground italic'>{(row.original as any).notes || 'No notes'}</span>
         ),
       },
     ],
@@ -313,7 +473,12 @@ function App() {
           <h1 className='text-4xl font-bold tracking-tight'>shadcn/ui DataGrid Component</h1>
           <p className='text-xl text-muted-foreground max-w-3xl mx-auto'>
             A feature-rich, composable datagrid built with TanStack Table v8, shadcn/ui, and Tailwind CSS v4. Supports
-            sorting, filtering, pagination, row selection, and bulk actions.
+            sorting, filtering, pagination, row selection, bulk actions, and inline cell editing.
+          </p>
+          <p className='text-sm text-muted-foreground max-w-4xl mx-auto'>
+            💡 Try editing modes: <strong>Click</strong> First Name, <strong>Blur</strong> Last Name,{' '}
+            <strong>Click + Buttons (Top-Right)</strong> Email, <strong>Double-click + Buttons (Bottom-Right)</strong>{' '}
+            Status, <strong>Double-click</strong> Role, <strong>Enter</strong> Notes
           </p>
 
           {/* Mode Toggle */}
@@ -344,7 +509,7 @@ function App() {
         {/* DataGrid */}
         <div className='space-y-4'>
           <DataGrid
-            data={isServerSide ? serverData : sampleUsers}
+            data={isServerSide ? serverData : clientData}
             columns={columns}
             actions={actions}
             enableRowSelection={true}
@@ -354,8 +519,13 @@ function App() {
             enableGlobalFilter={true}
             enableColumnFilters={true}
             enablePagination={true}
-            pageSize={5}
-            pageSizeOptions={[5, 10, 20, 50]}
+            pageSize={15}
+            pageSizeOptions={[10, 15, 25, 50]}
+            // Cell editing
+            enableCellEditing={true}
+            defaultEditMode='click'
+            onCellEdit={handleCellEdit}
+            onCellEditError={handleCellEditError}
             // Server-side props
             manualPagination={isServerSide}
             manualSorting={isServerSide}
@@ -400,6 +570,12 @@ function App() {
           <div className='bg-card p-6 rounded-lg border'>
             <h3 className='font-semibold mb-2'>♿ Accessible</h3>
             <p className='text-sm text-muted-foreground'>WCAG compliant with full keyboard navigation</p>
+          </div>
+          <div className='bg-card p-6 rounded-lg border'>
+            <h3 className='font-semibold mb-2'>✏️ Inline Editing</h3>
+            <p className='text-sm text-muted-foreground'>
+              Click to edit cells with validation and custom input components
+            </p>
           </div>
         </div>
       </div>

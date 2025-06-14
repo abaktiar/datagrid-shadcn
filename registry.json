@@ -7,7 +7,7 @@
       "name": "data-grid",
       "type": "registry:component",
       "title": "Data Grid",
-      "description": "A feature-rich, composable data grid built with TanStack Table v8, shadcn/ui, and Tailwind CSS. Supports sorting, filtering, pagination, row selection, bulk actions, and context menus.",
+      "description": "A feature-rich, composable data grid built with TanStack Table v8, shadcn/ui, and Tailwind CSS. Supports sorting, filtering, pagination, row selection, bulk actions, context menus, and inline cell editing with configurable behaviors.",
       "dependencies": [
         "@tanstack/react-table",
         "@tanstack/react-virtual",
@@ -16,14 +16,7 @@
         "clsx",
         "tailwind-merge"
       ],
-      "registryDependencies": [
-        "button",
-        "checkbox",
-        "input",
-        "select",
-        "context-menu",
-        "dropdown-menu"
-      ],
+      "registryDependencies": ["button", "checkbox", "input", "select", "context-menu", "dropdown-menu"],
       "files": [
         {
           "path": "src/components/data-grid/data-grid.tsx",
@@ -54,6 +47,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/data-grid/data-grid-editable-cell.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/data-grid/context.tsx",
           "type": "registry:component"
         },
@@ -63,6 +60,14 @@
         },
         {
           "path": "src/components/data-grid/context-menu-utils.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/data-grid/edit-components.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/data-grid/edit-presets.tsx",
           "type": "registry:component"
         },
         {

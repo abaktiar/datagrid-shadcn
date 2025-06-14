@@ -30,17 +30,17 @@ export function DataGridActionDock() {
   };
 
   return (
-    <div className='fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 animate-in slide-in-from-bottom-4 duration-300'>
-      <div className='flex items-center gap-3 px-4 py-3 bg-background/95 backdrop-blur-md border border-border/50 rounded-2xl shadow-lg shadow-black/10 dark:shadow-black/20'>
-        <Button variant='outline' size='sm' onClick={clearSelection} aria-label='Clear selection'>
-          {selectedRows.length} selected <X className='h-4 w-4' />
+    <div className='fixed bottom-4 left-1/2 -translate-x-1/2 z-50'>
+      <div className='flex items-center gap-2 px-3 py-2 bg-background border border-border rounded-md shadow-md'>
+        <Button variant='ghost' size='sm' onClick={clearSelection} aria-label='Clear selection' className='h-8 px-2'>
+          {selectedRows.length} selected <X className='h-3 w-3 ml-1' />
         </Button>
 
         {/* Dock Separator */}
-        <div className='w-px h-6 bg-border/50 mx-1' />
+        <div className='w-px h-4 bg-border' />
 
         {/* Primary Actions */}
-        <div className='flex items-center gap-2'>
+        <div className='flex items-center gap-1'>
           {primaryActions.map((action) => {
             const isEnabled = action.isEnabled ? action.isEnabled(selectedRows) : true;
 
@@ -50,9 +50,10 @@ export function DataGridActionDock() {
                 variant={action.variant || 'default'}
                 size='sm'
                 onClick={() => handleActionClick(action)}
-                disabled={!isEnabled}>
-                {action.icon && <span className='h-4 w-4'>{action.icon}</span>}
-                <span>{action.label}</span>
+                disabled={!isEnabled}
+                className='h-8 px-3'>
+                {action.icon && <span className='h-3 w-3 mr-1'>{action.icon}</span>}
+                <span className='text-xs'>{action.label}</span>
               </Button>
             );
           })}
@@ -61,22 +62,22 @@ export function DataGridActionDock() {
         {/* Overflow Actions */}
         {overflowActions.length > 0 && (
           <>
-            <div className='w-px h-6 bg-border/50 mx-1' />
+            <div className='w-px h-4 bg-border' />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant='outline' size='sm'>
-                  <MoreHorizontal className='h-4 w-4' />
-                  <span>More</span>
+                <Button variant='ghost' size='sm' className='h-8 px-2'>
+                  <MoreHorizontal className='h-3 w-3 mr-1' />
+                  <span className='text-xs'>More</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align='center' side='top' sideOffset={8}>
+              <DropdownMenuContent align='center' side='top' sideOffset={4}>
                 {overflowActions.map((action) => {
                   const isEnabled = action.isEnabled ? action.isEnabled(selectedRows) : true;
 
                   return (
                     <DropdownMenuItem key={action.id} onClick={() => handleActionClick(action)} disabled={!isEnabled}>
-                      {action.icon && <span className='h-4 w-4'>{action.icon}</span>}
-                      <span>{action.label}</span>
+                      {action.icon && <span className='h-3 w-3 mr-2'>{action.icon}</span>}
+                      <span className='text-xs'>{action.label}</span>
                     </DropdownMenuItem>
                   );
                 })}

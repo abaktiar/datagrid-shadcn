@@ -10,7 +10,7 @@ export function DataGridHeader() {
   const { table, headerContextMenuItems, enableHeaderContextMenu } = useDataGrid();
 
   return (
-    <thead className='[&_tr]:border-b'>
+    <thead className='[&_tr]:border-b bg-muted/30'>
       {table.getHeaderGroups().map((headerGroup) => (
         <tr key={headerGroup.id} role='row'>
           {headerGroup.headers.map((header) => {
@@ -30,8 +30,10 @@ export function DataGridHeader() {
                     : undefined
                 }
                 className={cn(
-                  'h-12 px-4 text-left align-middle font-medium text-muted-foreground relative',
+                  'h-10 px-3 text-left align-middle font-medium text-foreground text-sm relative border-r border-border/50',
                   '[&:has([role=checkbox])]:pr-0',
+                  header.column.id === 'select' && 'border-r-0',
+                  header.column.getIsResizing() && 'w-2 border-r-primary',
                   canSort && 'cursor-pointer select-none hover:bg-muted/50'
                 )}
                 style={{
@@ -65,11 +67,11 @@ export function DataGridHeader() {
                     onTouchStart={header.getResizeHandler()}
                     className={cn(
                       'absolute right-0 top-0 h-full w-2 cursor-col-resize select-none touch-none',
-                      'bg-transparent hover:bg-primary/20 transition-colors duration-150',
-                      'before:absolute before:left-1/2 before:top-0 before:h-full before:w-0.5',
-                      'before:bg-border before:transform before:-translate-x-1/2 before:transition-colors before:duration-150',
-                      'hover:before:bg-primary/60 hover:w-3',
-                      header.column.getIsResizing() && 'bg-primary/30 w-3 before:bg-primary'
+                      'bg-transparent hover:bg-transparent transition-colors duration-150',
+                      'before:absolute before:left-1/2 before:top-0 before:h-full before:w-px',
+                      'before:bg-border/50 before:transform before:-translate-x-1/2 before:transition-colors before:duration-150',
+                      'hover:before:bg-primary',
+                      header.column.getIsResizing() && 'before:bg-primary'
                     )}
                     style={{
                       transform: 'translateX(50%)',

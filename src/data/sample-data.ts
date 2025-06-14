@@ -1,12 +1,15 @@
 export interface User {
-  id: string
-  firstName: string
-  lastName: string
-  email: string
-  role: string
-  status: 'active' | 'inactive' | 'pending'
-  lastLogin: string
-  createdAt: string
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+  status: 'active' | 'inactive' | 'pending';
+  lastLogin: string;
+  createdAt: string;
+  priority?: 'High' | 'Medium' | 'Low';
+  department?: string;
+  notes?: string;
 }
 
 export const sampleUsers: User[] = [
@@ -19,6 +22,9 @@ export const sampleUsers: User[] = [
     status: 'active',
     lastLogin: '2024-01-15T10:30:00Z',
     createdAt: '2023-06-01T09:00:00Z',
+    priority: 'High',
+    department: 'Engineering',
+    notes: 'Team lead for frontend development',
   },
   {
     id: '2',
@@ -29,6 +35,9 @@ export const sampleUsers: User[] = [
     status: 'active',
     lastLogin: '2024-01-14T16:45:00Z',
     createdAt: '2023-07-15T14:30:00Z',
+    priority: 'Medium',
+    department: 'Marketing',
+    notes: 'Content strategy specialist',
   },
   {
     id: '3',
@@ -39,6 +48,8 @@ export const sampleUsers: User[] = [
     status: 'inactive',
     lastLogin: '2024-01-10T08:15:00Z',
     createdAt: '2023-08-20T11:00:00Z',
+    priority: 'Low',
+    department: 'Sales',
   },
   {
     id: '4',
@@ -160,4 +171,4 @@ export const sampleUsers: User[] = [
     lastLogin: '2024-01-16T12:05:00Z',
     createdAt: '2023-10-25T09:30:00Z',
   },
-]
+];

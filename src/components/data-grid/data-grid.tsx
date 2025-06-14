@@ -53,6 +53,10 @@ export function DataGrid<TData>({
   manualFiltering = false,
   onGlobalFilterChange,
   onColumnFiltersChange,
+  enableCellEditing = false,
+  defaultEditMode = 'click',
+  onCellEdit,
+  onCellEditError,
   enableColumnResizing = true,
   onColumnSizingChange,
   enableVirtualization = false,
@@ -74,6 +78,7 @@ export function DataGrid<TData>({
     pageIndex: 0,
     pageSize,
   });
+  const [editingCell, setEditingCell] = useState<{ rowId: string; columnId: string } | null>(null);
 
   // Enhanced columns with selection column if needed
   const enhancedColumns = useMemo(() => {
@@ -82,30 +87,36 @@ export function DataGrid<TData>({
       cols.unshift({
         id: 'select',
         header: ({ table }: { table: Table<TData> }) => (
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected() ? true : table.getIsSomePageRowsSelected() ? 'indeterminate' : false
-            }
-            onCheckedChange={(checked) => {
-              if (checked === 'indeterminate') {
-                return;
+          <div className='flex items-center justify-center'>
+            <Checkbox
+              checked={
+                table.getIsAllPageRowsSelected() ? true : table.getIsSomePageRowsSelected() ? 'indeterminate' : false
               }
-              table.toggleAllPageRowsSelected(checked);
-            }}
-            aria-label='Select all rows'
-          />
+              onCheckedChange={(checked) => {
+                if (checked === 'indeterminate') {
+                  return;
+                }
+                table.toggleAllPageRowsSelected(checked);
+              }}
+              aria-label='Select all rows'
+              className='size-3.5'
+            />
+          </div>
         ),
         cell: ({ row }: { row: Row<TData> }) => (
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(checked) => {
-              if (checked === 'indeterminate') {
-                return;
-              }
-              row.toggleSelected(checked);
-            }}
-            aria-label={`Select row ${row.index + 1}`}
-          />
+          <div className='flex items-center justify-center'>
+            <Checkbox
+              checked={row.getIsSelected()}
+              onCheckedChange={(checked) => {
+                if (checked === 'indeterminate') {
+                  return;
+                }
+                row.toggleSelected(checked);
+              }}
+              aria-label={`Select row ${row.index + 1}`}
+              className='size-3.5'
+            />
+          </div>
         ),
         enableSorting: false,
         enableHiding: false,
@@ -171,6 +182,12 @@ export function DataGrid<TData>({
       headerContextMenuItems,
       enableCellContextMenu,
       enableHeaderContextMenu,
+      enableCellEditing,
+      defaultEditMode,
+      editingCell,
+      setEditingCell,
+      onCellEdit,
+      onCellEditError,
       isLoading,
       error,
     }),
@@ -182,6 +199,12 @@ export function DataGrid<TData>({
       headerContextMenuItems,
       enableCellContextMenu,
       enableHeaderContextMenu,
+      enableCellEditing,
+      defaultEditMode,
+      editingCell,
+      setEditingCell,
+      onCellEdit,
+      onCellEditError,
       isLoading,
       error,
     ]
@@ -261,10 +284,10 @@ export function DataGrid<TData>({
         )}
 
         {/* Table */}
-        <div className='rounded-md border'>
+        <div className='rounded-md border border-border bg-background'>
           <div className='relative overflow-auto'>
             <table
-              className='w-full caption-bottom text-sm'
+              className='w-full caption-bottom text-sm border-collapse'
               role='grid'
               aria-rowcount={table.getRowModel().rows.length}
               style={{
