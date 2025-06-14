@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect, useCallback } from 'react';
-import { Trash2, Download, CheckCircle, Archive, Server, Monitor } from 'lucide-react';
+import { Trash2, Download, CheckCircle, Archive, Server, Monitor, Copy, Check, Github, Heart } from 'lucide-react';
 import {
   DataGrid,
   DataGridColumn,
@@ -45,6 +45,30 @@ const StatusSelectInput = createSelectEditComponent<UserType>(statusOptions);
 function App() {
   // Demo state for server-side vs client-side
   const [isServerSide, setIsServerSide] = useState(false);
+
+  // Copy to clipboard state
+  const [copiedCommand, setCopiedCommand] = useState<string | null>(null);
+  const [selectedPackageManager, setSelectedPackageManager] = useState<string>('npm');
+
+  // Package manager commands
+  const packageCommands = {
+    npm: 'npx shadcn@latest add https://datagrid-shadcn.netlify.app/r/data-grid.json',
+    yarn: 'yarn dlx shadcn@latest add https://datagrid-shadcn.netlify.app/r/data-grid.json',
+    pnpm: 'pnpm dlx shadcn@latest add https://datagrid-shadcn.netlify.app/r/data-grid.json',
+    bun: 'bunx shadcn@latest add https://datagrid-shadcn.netlify.app/r/data-grid.json',
+  };
+
+  // Copy to clipboard function
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(packageCommands[selectedPackageManager as keyof typeof packageCommands]);
+      setCopiedCommand(selectedPackageManager);
+      setTimeout(() => setCopiedCommand(null), 2000);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
+
   const [serverData, setServerData] = useState(sampleUsers.slice(0, 15)); // Start with first page
   const [totalCount, setTotalCount] = useState(sampleUsers.length);
   const [pageCount, setPageCount] = useState(Math.ceil(sampleUsers.length / 15));
@@ -543,6 +567,77 @@ function App() {
           />
         </div>
 
+        {/* Installation Section */}
+        <div className='mt-12 mb-12'>
+          <div className='max-w-4xl mx-auto'>
+            <div className='text-center mb-8'>
+              <h2 className='text-2xl font-bold mb-2'>📦 Quick Installation</h2>
+              <p className='text-muted-foreground'>Add the DataGrid component to your project with a single command</p>
+            </div>
+
+            <div className='space-y-4'>
+              {/* Package Manager Tabs - Top Left */}
+              <div className='flex items-center'>
+                <div className='inline-flex items-center bg-muted/50 rounded-lg p-1 border'>
+                  {Object.keys(packageCommands).map((pm) => (
+                    <button
+                      key={pm}
+                      onClick={() => setSelectedPackageManager(pm)}
+                      className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 ${
+                        selectedPackageManager === pm
+                          ? 'bg-primary text-primary-foreground shadow-sm'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-background/50'
+                      }`}>
+                      {pm}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Command Display */}
+              <div className='relative'>
+                <div className='flex items-center gap-3 bg-background rounded-lg border p-4'>
+                  <div className='flex items-center gap-2 text-muted-foreground'>
+                    <div className='w-3 h-3 rounded-full bg-red-500'></div>
+                    <div className='w-3 h-3 rounded-full bg-yellow-500'></div>
+                    <div className='w-3 h-3 rounded-full bg-green-500'></div>
+                  </div>
+                  <div className='flex-1 font-mono text-sm text-foreground overflow-x-auto px-2'>
+                    <span className='text-muted-foreground'>$ </span>
+                    {packageCommands[selectedPackageManager as keyof typeof packageCommands]}
+                  </div>
+                  <Button
+                    size='sm'
+                    variant='ghost'
+                    onClick={copyToClipboard}
+                    className='h-8 w-8 p-0 flex-shrink-0 hover:bg-muted'>
+                    {copiedCommand === selectedPackageManager ? (
+                      <Check className='h-4 w-4 text-green-600' />
+                    ) : (
+                      <Copy className='h-4 w-4' />
+                    )}
+                  </Button>
+                </div>
+
+                {/* Success message */}
+                {copiedCommand === selectedPackageManager && (
+                  <div className='absolute -bottom-8 left-1/2 transform -translate-x-1/2'>
+                    <div className='bg-green-100 text-green-800 text-xs px-2 py-1 rounded-md border border-green-200'>
+                      Copied to clipboard!
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className='text-center'>
+                <p className='text-sm text-muted-foreground'>
+                  This will install the DataGrid component and all its dependencies to your project
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Features */}
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12'>
           <div className='bg-card p-6 rounded-lg border'>
@@ -578,6 +673,39 @@ function App() {
             </p>
           </div>
         </div>
+
+        {/* Footer */}
+        <footer className='mt-16 py-2 border-t'>
+          <div className='max-w-4xl mx-auto px-4'>
+            <div className='flex flex-col md:flex-row items-center justify-between gap-4'>
+              <div className='flex items-center gap-2 text-sm text-muted-foreground'>
+                <span>Built with</span>
+                <Heart className='h-4 w-4 text-red-500 fill-current' />
+                <span>by</span>
+                <a
+                  href='https://github.com/abaktiar'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='font-medium text-foreground hover:text-primary transition-colors'>
+                  abaktiar
+                </a>
+                <span>&</span>
+                <span className='font-medium text-foreground'>AI✨</span>
+              </div>
+
+              <div className='flex items-center gap-4'>
+                <a
+                  href='https://github.com/abaktiar/datagrid-shadcn'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-foreground bg-background border rounded-lg hover:bg-muted transition-colors'>
+                  <Github className='h-4 w-4' />
+                  View on GitHub
+                </a>
+              </div>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
   );

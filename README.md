@@ -6,15 +6,37 @@ A feature-rich, composable datagrid component built with TanStack Table v8, shad
 
 ### Using shadcn CLI (Recommended)
 
-```bash
-# Install from local development server
-npx shadcn@latest add http://localhost:5173/r/data-grid.json
+Install the DataGrid component directly into your project:
 
-# Or install from published registry (when deployed)
-npx shadcn@latest add https://your-domain.com/r/data-grid.json
+```bash
+npx shadcn@latest add https://datagrid-shadcn.netlify.app/r/data-grid.json
+```
+
+### Alternative Package Managers
+
+**npm:**
+```bash
+npx shadcn@latest add https://datagrid-shadcn.netlify.app/r/data-grid.json
+```
+
+**yarn:**
+```bash
+yarn dlx shadcn@latest add https://datagrid-shadcn.netlify.app/r/data-grid.json
+```
+
+**pnpm:**
+```bash
+pnpm dlx shadcn@latest add https://datagrid-shadcn.netlify.app/r/data-grid.json
+```
+
+**bun:**
+```bash
+bunx shadcn@latest add https://datagrid-shadcn.netlify.app/r/data-grid.json
 ```
 
 ### Manual Installation
+
+If you prefer to install manually:
 
 1. Install dependencies:
 ```bash
@@ -30,7 +52,14 @@ npx shadcn@latest add button checkbox input select context-menu dropdown-menu
 
 ## 🚀 Registry Deployment
 
-### Build Registry
+### Live Registry
+
+The DataGrid component is deployed and available at:
+```
+https://datagrid-shadcn.netlify.app/r/data-grid.json
+```
+
+### Build Registry Locally
 
 ```bash
 npm run registry:build
@@ -38,7 +67,7 @@ npm run registry:build
 
 This generates registry files in `public/r/` that can be consumed by the shadcn CLI.
 
-### Deploy to Vercel/Netlify
+### Deploy Your Own Registry
 
 1. Build the registry:
 ```bash
@@ -52,15 +81,7 @@ npm run registry:build
 https://your-domain.com/r/data-grid.json
 ```
 
-### Test Installation
-
-Once deployed, users can install your DataGrid with:
-
-```bash
-npx shadcn@latest add https://your-domain.com/r/data-grid.json
-```
-
-## 🧪 Local Testing
+## 🧪 Local Development
 
 To test the registry locally:
 
