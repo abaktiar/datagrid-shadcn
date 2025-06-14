@@ -1,19 +1,17 @@
-import { 
-  Copy, 
-  Pin, 
-  PinOff, 
-  SortAsc, 
-  SortDesc, 
-  Filter, 
-  FilterX, 
-  Eye, 
-  EyeOff, 
-  ArrowUp, 
-  ArrowDown, 
+import {
+  Copy,
+  Pin,
+  PinOff,
+  SortAsc,
+  SortDesc,
+  Filter,
+  FilterX,
+  Eye,
+  EyeOff,
   Trash2,
   Edit,
   MoreHorizontal,
-  Columns
+  Columns,
 } from 'lucide-react';
 import { Column, Row } from '@tanstack/react-table';
 import { CellContextMenuItem, HeaderContextMenuItem } from './types';

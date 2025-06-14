@@ -5,7 +5,7 @@ import {
   ContextMenuItem,
   ContextMenuSeparator,
   ContextMenuTrigger,
-} from '@/components/ui/context-menu';
+} from '../ui/context-menu';
 import { Row, Column } from '@tanstack/react-table';
 import { CellContextMenuItem, HeaderContextMenuItem } from './types';
 

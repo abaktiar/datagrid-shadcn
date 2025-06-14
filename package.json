@@ -1,5 +1,5 @@
 {
-  "name": "datagrid-shadcn",
+  "name": "@abaktiar/datagrid-shadcn",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "registry:build": "shadcn build"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.3.2",
@@ -35,6 +36,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
+    "shadcn": "^2.4.0-canary.12",
     "tw-animate-css": "^1.3.4",
     "vite": "^6.3.5"
   }

@@ -1,14 +1,14 @@
 import { Search, Settings2, Eye, EyeOff } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { 
-  DropdownMenu, 
-  DropdownMenuCheckboxItem, 
-  DropdownMenuContent, 
-  DropdownMenuLabel, 
-  DropdownMenuSeparator, 
-  DropdownMenuTrigger 
-} from '@/components/ui/dropdown-menu'
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
 import { useDataGrid } from './context'
 
 interface DataGridFiltersProps {

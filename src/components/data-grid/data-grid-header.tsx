@@ -1,7 +1,9 @@
-import { flexRender } from '@tanstack/react-table'
-import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { useDataGrid } from './context'
+'use client';
+
+import { flexRender } from '@tanstack/react-table';
+import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { cn } from '../../lib/utils';
+import { useDataGrid } from './context';
 import { HeaderContextMenu } from './data-grid-context-menu';
 
 export function DataGridHeader() {

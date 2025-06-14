@@ -1,0 +1,75 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "datagrid-shadcn",
+  "homepage": "https://github.com/abaktiar/datagrid-shadcn",
+  "items": [
+    {
+      "name": "data-grid",
+      "type": "registry:component",
+      "title": "Data Grid",
+      "description": "A feature-rich, composable data grid built with TanStack Table v8, shadcn/ui, and Tailwind CSS. Supports sorting, filtering, pagination, row selection, bulk actions, and context menus.",
+      "dependencies": [
+        "@tanstack/react-table",
+        "@tanstack/react-virtual",
+        "lucide-react",
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "button",
+        "checkbox",
+        "input",
+        "select",
+        "context-menu",
+        "dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "src/components/data-grid/data-grid.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/data-grid/data-grid-header.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/data-grid/data-grid-body.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/data-grid/data-grid-pagination.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/data-grid/data-grid-filters.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/data-grid/data-grid-action-dock.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/data-grid/data-grid-context-menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/data-grid/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/data-grid/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/data-grid/context-menu-utils.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/data-grid/index.ts",
+          "type": "registry:component"
+        }
+      ]
+    }
+  ]
+}

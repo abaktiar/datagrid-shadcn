@@ -1,8 +1,10 @@
-import { flexRender } from '@tanstack/react-table'
-import { useVirtualizer } from '@tanstack/react-virtual'
-import { useRef } from 'react'
-import { cn } from '@/lib/utils'
-import { useDataGrid } from './context'
+'use client';
+
+import { useRef } from 'react';
+import { flexRender } from '@tanstack/react-table';
+import { useVirtualizer } from '@tanstack/react-virtual';
+import { cn } from '../../lib/utils';
+import { useDataGrid } from './context';
 import { CellContextMenu } from './data-grid-context-menu';
 
 interface DataGridBodyProps {

@@ -1,4 +1,6 @@
-import React, { useMemo, useState } from 'react'
+'use client';
+
+import React, { useMemo, useState } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -13,8 +15,8 @@ import {
   Table,
   Row,
 } from '@tanstack/react-table';
-import { cn } from '@/lib/utils';
-import { Checkbox } from '@/components/ui/checkbox';
+import { cn } from '../../lib/utils';
+import { Checkbox } from '../ui/checkbox';
 import { DataGridProps, DataGridContextValue } from './types';
 import { DataGridContext } from './context';
 import { DataGridHeader } from './data-grid-header';

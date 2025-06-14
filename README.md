@@ -2,6 +2,78 @@
 
 A feature-rich, composable datagrid component built with TanStack Table v8, shadcn/ui, and Tailwind CSS v4. This implementation follows the comprehensive Product Requirements Document (PRD) for creating a high-performance, accessible, and customizable data grid.
 
+## 📦 Installation
+
+### Using shadcn CLI (Recommended)
+
+```bash
+# Install from local development server
+npx shadcn@latest add http://localhost:5173/r/data-grid.json
+
+# Or install from published registry (when deployed)
+npx shadcn@latest add https://your-domain.com/r/data-grid.json
+```
+
+### Manual Installation
+
+1. Install dependencies:
+```bash
+npm install @tanstack/react-table @tanstack/react-virtual lucide-react class-variance-authority clsx tailwind-merge
+```
+
+2. Install required shadcn components:
+```bash
+npx shadcn@latest add button checkbox input select context-menu dropdown-menu
+```
+
+3. Copy the component files from this repository to your project.
+
+## 🚀 Registry Deployment
+
+### Build Registry
+
+```bash
+npm run registry:build
+```
+
+This generates registry files in `public/r/` that can be consumed by the shadcn CLI.
+
+### Deploy to Vercel/Netlify
+
+1. Build the registry:
+```bash
+npm run registry:build
+```
+
+2. Deploy your project to Vercel, Netlify, or any static hosting service
+
+3. Your registry will be available at:
+```
+https://your-domain.com/r/data-grid.json
+```
+
+### Test Installation
+
+Once deployed, users can install your DataGrid with:
+
+```bash
+npx shadcn@latest add https://your-domain.com/r/data-grid.json
+```
+
+## 🧪 Local Testing
+
+To test the registry locally:
+
+1. Start the development server:
+```bash
+npm run dev
+```
+
+2. In another project, install from local server:
+```bash
+npx shadcn@latest add http://localhost:5173/r/data-grid.json
+```
+
 ## 🚀 Features
 
 ### Core Functionality
