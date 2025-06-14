@@ -11,7 +11,7 @@ interface DataGridBodyProps {
 }
 
 export function DataGridBody({ enableVirtualization = false, estimateSize = 35 }: DataGridBodyProps) {
-  const { table, isLoading, error } = useDataGrid();
+  const { table, isLoading, error, cellContextMenuItems, enableCellContextMenu } = useDataGrid();
   const tableContainerRef = useRef<HTMLTableSectionElement>(null);
 
   const rows = table.getRowModel().rows;
@@ -105,15 +105,7 @@ export function DataGridBody({ enableVirtualization = false, estimateSize = 35 }
                   row={row}
                   column={cell.column}
                   value={cell.getValue()}
-                  onEdit={(row) => {
-                    console.log('Edit row:', row.original);
-                  }}
-                  onView={(row) => {
-                    console.log('View row:', row.original);
-                  }}
-                  onDelete={(row) => {
-                    console.log('Delete row:', row.original);
-                  }}>
+                  items={enableCellContextMenu ? cellContextMenuItems : []}>
                   <td
                     role='gridcell'
                     className={cn(
@@ -155,15 +147,7 @@ export function DataGridBody({ enableVirtualization = false, estimateSize = 35 }
               row={row}
               column={cell.column}
               value={cell.getValue()}
-              onEdit={(row) => {
-                console.log('Edit row:', row.original);
-              }}
-              onView={(row) => {
-                console.log('View row:', row.original);
-              }}
-              onDelete={(row) => {
-                console.log('Delete row:', row.original);
-              }}>
+              items={enableCellContextMenu ? cellContextMenuItems : []}>
               <td
                 role='gridcell'
                 className={cn('p-4 align-middle [&:has([role=checkbox])]:pr-0', cell.column.id === 'select' && 'w-12')}
