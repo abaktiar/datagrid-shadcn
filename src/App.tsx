@@ -1,6 +1,17 @@
-import { useMemo } from 'react';
-import { Trash2, Download, CheckCircle, Archive, User as UserIcon, Mail, Calendar } from 'lucide-react';
-import { DataGrid, DataGridColumn, DataGridAction } from './components/data-grid';
+import { useMemo, useState, useEffect, useCallback } from 'react';
+import {
+  Trash2,
+  Download,
+  CheckCircle,
+  Archive,
+  User as UserIcon,
+  Mail,
+  Calendar,
+  Server,
+  Monitor,
+} from 'lucide-react';
+import { DataGrid, DataGridColumn, DataGridAction, DataChangeParams } from './components/data-grid';
+import { Button } from './components/ui/button';
 import {
   copyCellItem,
   copyRowItem,
@@ -23,6 +34,80 @@ import {
 import { sampleUsers, type User as UserType } from './data/sample-data';
 
 function App() {
+  // Demo state for server-side vs client-side
+  const [isServerSide, setIsServerSide] = useState(false);
+  const [serverData, setServerData] = useState(sampleUsers.slice(0, 5)); // Start with first page
+  const [totalCount, setTotalCount] = useState(sampleUsers.length);
+  const [pageCount, setPageCount] = useState(Math.ceil(sampleUsers.length / 5));
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Simulate server-side data fetching
+  const handleDataChange = useCallback(async (params: DataChangeParams) => {
+    console.log('handleDataChange called with:', params);
+    setIsLoading(true);
+
+    try {
+      // Simulate API delay
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      // Simulate server-side operations
+      let filteredData = [...sampleUsers];
+
+      // Apply global filter
+      if (params.globalFilter) {
+        filteredData = filteredData.filter((user) =>
+          Object.values(user).some((value) => String(value).toLowerCase().includes(params.globalFilter.toLowerCase()))
+        );
+      }
+
+      // Apply sorting
+      if (params.sorting.length > 0) {
+        const sort = params.sorting[0];
+        filteredData.sort((a, b) => {
+          const aVal = (a as any)[sort.id];
+          const bVal = (b as any)[sort.id];
+          if (aVal < bVal) return sort.desc ? 1 : -1;
+          if (aVal > bVal) return sort.desc ? -1 : 1;
+          return 0;
+        });
+      }
+
+      // Apply pagination
+      const startIndex = params.pagination.pageIndex * params.pagination.pageSize;
+      const endIndex = startIndex + params.pagination.pageSize;
+      const paginatedData = filteredData.slice(startIndex, endIndex);
+
+      console.log('Setting server data:', paginatedData);
+      setServerData(paginatedData);
+      setTotalCount(filteredData.length);
+      setPageCount(Math.ceil(filteredData.length / params.pagination.pageSize));
+    } catch (error) {
+      console.error('Error in handleDataChange:', error);
+    } finally {
+      console.log('Setting loading to false');
+      setIsLoading(false);
+    }
+  }, []);
+
+  // Effect to handle initial load when switching to server-side mode
+  useEffect(() => {
+    if (isServerSide) {
+      // Trigger initial data load for server-side mode
+      handleDataChange({
+        pagination: { pageIndex: 0, pageSize: 5 },
+        sorting: [],
+        filters: [],
+        globalFilter: '',
+      });
+    } else {
+      // Reset to client-side data
+      setServerData(sampleUsers.slice(0, 5));
+      setTotalCount(sampleUsers.length);
+      setPageCount(Math.ceil(sampleUsers.length / 5));
+      setIsLoading(false); // Ensure loading is false for client-side
+    }
+  }, [isServerSide]);
+
   // Define columns for the user data
   const columns: DataGridColumn<UserType>[] = useMemo(
     () => [
@@ -230,12 +315,36 @@ function App() {
             A feature-rich, composable datagrid built with TanStack Table v8, shadcn/ui, and Tailwind CSS v4. Supports
             sorting, filtering, pagination, row selection, and bulk actions.
           </p>
+
+          {/* Mode Toggle */}
+          <div className='flex items-center justify-center gap-4'>
+            <Button
+              variant={!isServerSide ? 'default' : 'outline'}
+              onClick={() => setIsServerSide(false)}
+              className='flex items-center gap-2'>
+              <Monitor className='h-4 w-4' />
+              Client-Side
+            </Button>
+            <Button
+              variant={isServerSide ? 'default' : 'outline'}
+              onClick={() => setIsServerSide(true)}
+              className='flex items-center gap-2'>
+              <Server className='h-4 w-4' />
+              Server-Side
+            </Button>
+          </div>
+
+          <p className='text-sm text-muted-foreground'>
+            {isServerSide
+              ? '🌐 Server-side mode: Data is fetched and processed on the server'
+              : '💻 Client-side mode: All operations performed in the browser'}
+          </p>
         </div>
 
         {/* DataGrid */}
         <div className='space-y-4'>
           <DataGrid
-            data={sampleUsers}
+            data={isServerSide ? serverData : sampleUsers}
             columns={columns}
             actions={actions}
             enableRowSelection={true}
@@ -247,6 +356,15 @@ function App() {
             enablePagination={true}
             pageSize={5}
             pageSizeOptions={[5, 10, 20, 50]}
+            // Server-side props
+            manualPagination={isServerSide}
+            manualSorting={isServerSide}
+            manualFiltering={isServerSide}
+            totalCount={isServerSide ? totalCount : undefined}
+            pageCount={isServerSide ? pageCount : undefined}
+            isLoading={isServerSide ? isLoading : false}
+            onDataChange={isServerSide ? handleDataChange : undefined}
+            // Context menus
             cellContextMenuItems={cellContextMenuItems}
             headerContextMenuItems={headerContextMenuItems}
             enableCellContextMenu={true}

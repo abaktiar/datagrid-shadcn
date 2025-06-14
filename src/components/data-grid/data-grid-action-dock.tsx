@@ -37,16 +37,9 @@ export function DataGridActionDock() {
   return (
     <div className='fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 animate-in slide-in-from-bottom-4 duration-300'>
       <div className='flex items-center gap-3 px-4 py-3 bg-background/95 backdrop-blur-md border border-border/50 rounded-2xl shadow-lg shadow-black/10 dark:shadow-black/20'>
-        {/* Selection Info */}
-        <div className='flex items-center gap-2 px-3 py-1.5 bg-muted/50 rounded-xl'>
-          <div className='flex items-center gap-2'>
-            <div className='h-2 w-2 rounded-full bg-primary animate-pulse' />
-            <span className='text-sm font-medium'>{selectedRows.length} selected</span>
-          </div>
-          <Button variant='ghost' size='sm' onClick={clearSelection} aria-label='Clear selection'>
-            <X className='h-4 w-4' />
-          </Button>
-        </div>
+        <Button variant='outline' size='sm' onClick={clearSelection} aria-label='Clear selection'>
+          {selectedRows.length} selected <X className='h-4 w-4' />
+        </Button>
 
         {/* Dock Separator */}
         <div className='w-px h-6 bg-border/50 mx-1' />

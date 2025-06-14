@@ -47,6 +47,22 @@ export interface HeaderContextMenuItem<TData> {
   variant?: 'default' | 'destructive';
 }
 
+export interface DataChangeParams {
+  pagination: {
+    pageIndex: number;
+    pageSize: number;
+  };
+  sorting: Array<{
+    id: string;
+    desc: boolean;
+  }>;
+  filters: Array<{
+    id: string;
+    value: any;
+  }>;
+  globalFilter: string;
+}
+
 export interface DataGridProps<TData> {
   data: TData[];
   columns: DataGridColumn<TData>[];
@@ -71,6 +87,7 @@ export interface DataGridProps<TData> {
   pageSizeOptions?: number[];
   manualPagination?: boolean;
   pageCount?: number;
+  totalCount?: number;
   onPaginationChange?: (pageIndex: number, pageSize: number) => void;
 
   // Sorting
@@ -85,6 +102,9 @@ export interface DataGridProps<TData> {
   manualFiltering?: boolean;
   onGlobalFilterChange?: (globalFilter: string) => void;
   onColumnFiltersChange?: (columnFilters: any[]) => void;
+
+  // Server-side data loading
+  onDataChange?: (params: DataChangeParams) => void;
 
   // Column resizing
   enableColumnResizing?: boolean;

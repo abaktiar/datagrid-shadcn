@@ -5,21 +5,23 @@ import {
   getSortedRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-  flexRender,
   ColumnFiltersState,
   SortingState,
   VisibilityState,
   RowSelectionState,
   PaginationState,
-} from '@tanstack/react-table'
-import { cn } from '@/lib/utils'
-import { DataGridProps, DataGridContextValue } from './types'
-import { DataGridContext } from './context'
-import { DataGridHeader } from './data-grid-header'
-import { DataGridBody } from './data-grid-body'
-import { DataGridPagination } from './data-grid-pagination'
-import { DataGridActionDock } from './data-grid-action-dock'
-import { DataGridFilters } from './data-grid-filters'
+  Table,
+  Row,
+} from '@tanstack/react-table';
+import { cn } from '@/lib/utils';
+import { Checkbox } from '@/components/ui/checkbox';
+import { DataGridProps, DataGridContextValue } from './types';
+import { DataGridContext } from './context';
+import { DataGridHeader } from './data-grid-header';
+import { DataGridBody } from './data-grid-body';
+import { DataGridPagination } from './data-grid-pagination';
+import { DataGridActionDock } from './data-grid-action-dock';
+import { DataGridFilters } from './data-grid-filters';
 
 export function DataGrid<TData>({
   data,
@@ -37,7 +39,9 @@ export function DataGrid<TData>({
   pageSizeOptions = [10, 20, 50, 100],
   manualPagination = false,
   pageCount,
+  totalCount,
   onPaginationChange,
+  onDataChange,
   enableSorting = true,
   enableMultiSort = false,
   manualSorting = false,
@@ -72,44 +76,47 @@ export function DataGrid<TData>({
   // Enhanced columns with selection column if needed
   const enhancedColumns = useMemo(() => {
     const cols = [...columns];
-
     if (enableRowSelection) {
       cols.unshift({
         id: 'select',
-        header: ({ table }) => (
-          <input
-            type='checkbox'
-            checked={table.getIsAllPageRowsSelected()}
-            ref={(el) => {
-              if (el) el.indeterminate = table.getIsSomePageRowsSelected();
+        header: ({ table }: { table: Table<TData> }) => (
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ? true : table.getIsSomePageRowsSelected() ? 'indeterminate' : false
+            }
+            onCheckedChange={(checked) => {
+              if (checked === 'indeterminate') {
+                return;
+              }
+              table.toggleAllPageRowsSelected(checked);
             }}
-            onChange={table.getToggleAllPageRowsSelectedHandler()}
             aria-label='Select all rows'
-            className='rounded border-input'
           />
         ),
-        cell: ({ row }) => (
-          <input
-            type='checkbox'
+        cell: ({ row }: { row: Row<TData> }) => (
+          <Checkbox
             checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
+            onCheckedChange={(checked) => {
+              if (checked === 'indeterminate') {
+                return;
+              }
+              row.toggleSelected(checked);
+            }}
             aria-label={`Select row ${row.index + 1}`}
-            className='rounded border-input'
           />
         ),
         enableSorting: false,
         enableHiding: false,
-        size: 40,
-      });
+        size: 60,
+      } as any);
     }
 
     return cols;
   }, [columns, enableRowSelection]);
-
   // Table instance
   const table = useReactTable({
     data,
-    columns: enhancedColumns,
+    columns: enhancedColumns as any,
     state: {
       rowSelection,
       sorting,
@@ -138,6 +145,9 @@ export function DataGrid<TData>({
     manualSorting,
     manualFiltering,
     pageCount: pageCount ?? -1,
+    meta: {
+      totalCount,
+    },
     getRowId: (row, index) => {
       // Use a unique identifier if available, otherwise fall back to index
       return (row as any).id?.toString() ?? index.toString();
@@ -199,6 +209,37 @@ export function DataGrid<TData>({
   React.useEffect(() => {
     onColumnSizingChange?.(columnSizing);
   }, [columnSizing, onColumnSizingChange]);
+
+  // Server-side data change effect
+  React.useEffect(() => {
+    if (onDataChange && (manualPagination || manualSorting || manualFiltering)) {
+      const params = {
+        pagination: {
+          pageIndex: pagination.pageIndex,
+          pageSize: pagination.pageSize,
+        },
+        sorting: sorting.map((sort) => ({
+          id: sort.id,
+          desc: sort.desc,
+        })),
+        filters: columnFilters.map((filter) => ({
+          id: filter.id,
+          value: filter.value,
+        })),
+        globalFilter,
+      };
+      onDataChange(params);
+    }
+  }, [
+    pagination,
+    sorting,
+    columnFilters,
+    globalFilter,
+    onDataChange,
+    manualPagination,
+    manualSorting,
+    manualFiltering,
+  ]);
 
   return (
     <DataGridContext.Provider value={contextValue}>
