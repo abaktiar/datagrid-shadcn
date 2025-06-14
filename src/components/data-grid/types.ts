@@ -1,28 +1,50 @@
-import { ColumnDef, Row, Table } from '@tanstack/react-table'
-import { ReactNode } from 'react'
+import { ColumnDef, Row, Table, Column } from '@tanstack/react-table';
+import { ReactNode } from 'react';
 
 export interface DataGridColumn<TData> extends ColumnDef<TData> {
-  id: string
-  header: string | ReactNode
-  accessorKey?: keyof TData
-  cell?: ({ row }: { row: Row<TData> }) => ReactNode
-  enableSorting?: boolean
-  enableFiltering?: boolean
-  enableHiding?: boolean
-  enableResizing?: boolean
-  size?: number
-  minSize?: number
-  maxSize?: number
+  id: string;
+  header: string | ReactNode;
+  accessorKey?: keyof TData;
+  cell?: ({ row }: { row: Row<TData> }) => ReactNode;
+  enableSorting?: boolean;
+  enableFiltering?: boolean;
+  enableHiding?: boolean;
+  enableResizing?: boolean;
+  size?: number;
+  minSize?: number;
+  maxSize?: number;
 }
 
 export interface DataGridAction<TData> {
-  id: string
-  label: string
-  icon?: ReactNode
-  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'
-  onClick: (selectedRows: Row<TData>[]) => void | Promise<void>
-  isEnabled?: (selectedRows: Row<TData>[]) => boolean
-  isVisible?: (selectedRows: Row<TData>[]) => boolean
+  id: string;
+  label: string;
+  icon?: ReactNode;
+  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
+  onClick: (selectedRows: Row<TData>[]) => void | Promise<void>;
+  isEnabled?: (selectedRows: Row<TData>[]) => boolean;
+  isVisible?: (selectedRows: Row<TData>[]) => boolean;
+}
+
+export interface CellContextMenuItem<TData> {
+  id: string;
+  label: string;
+  icon?: ReactNode;
+  onClick: (row: Row<TData>, column: Column<TData>, value: any) => void | Promise<void>;
+  isEnabled?: (row: Row<TData>, column: Column<TData>, value: any) => boolean;
+  isVisible?: (row: Row<TData>, column: Column<TData>, value: any) => boolean;
+  separator?: boolean;
+  variant?: 'default' | 'destructive';
+}
+
+export interface HeaderContextMenuItem<TData> {
+  id: string;
+  label: string;
+  icon?: ReactNode;
+  onClick: (column: Column<TData>) => void | Promise<void>;
+  isEnabled?: (column: Column<TData>) => boolean;
+  isVisible?: (column: Column<TData>) => boolean;
+  separator?: boolean;
+  variant?: 'default' | 'destructive';
 }
 
 export interface DataGridProps<TData> {
@@ -36,6 +58,12 @@ export interface DataGridProps<TData> {
 
   // Actions
   actions?: DataGridAction<TData>[];
+
+  // Context Menus
+  cellContextMenuItems?: CellContextMenuItem<TData>[];
+  headerContextMenuItems?: HeaderContextMenuItem<TData>[];
+  enableCellContextMenu?: boolean;
+  enableHeaderContextMenu?: boolean;
 
   // Pagination
   enablePagination?: boolean;
@@ -79,22 +107,26 @@ export interface DataGridProps<TData> {
 }
 
 export interface DataGridState {
-  rowSelection: Record<string, boolean>
-  sorting: any[]
-  columnFilters: any[]
-  globalFilter: string
+  rowSelection: Record<string, boolean>;
+  sorting: any[];
+  columnFilters: any[];
+  globalFilter: string;
   pagination: {
-    pageIndex: number
-    pageSize: number
-  }
-  columnVisibility: Record<string, boolean>
-  columnSizing: Record<string, number>
+    pageIndex: number;
+    pageSize: number;
+  };
+  columnVisibility: Record<string, boolean>;
+  columnSizing: Record<string, number>;
 }
 
 export interface DataGridContextValue<TData> {
-  table: Table<TData>
-  selectedRows: Row<TData>[]
-  actions: DataGridAction<TData>[]
-  isLoading: boolean
-  error: string | null
+  table: Table<TData>;
+  selectedRows: Row<TData>[];
+  actions: DataGridAction<TData>[];
+  cellContextMenuItems?: CellContextMenuItem<TData>[];
+  headerContextMenuItems?: HeaderContextMenuItem<TData>[];
+  enableCellContextMenu: boolean;
+  enableHeaderContextMenu: boolean;
+  isLoading: boolean;
+  error: string | null;
 }

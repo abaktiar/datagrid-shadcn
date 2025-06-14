@@ -1,6 +1,25 @@
 import { useMemo } from 'react';
 import { Trash2, Download, CheckCircle, Archive, User as UserIcon, Mail, Calendar } from 'lucide-react';
 import { DataGrid, DataGridColumn, DataGridAction } from './components/data-grid';
+import {
+  copyCellItem,
+  copyRowItem,
+  editCellItem,
+  deleteRowItem,
+  selectRowItem,
+  sortAscendingItem,
+  sortDescendingItem,
+  clearSortItem,
+  filterColumnItem,
+  clearFilterItem,
+  pinLeftItem,
+  pinRightItem,
+  unpinColumnItem,
+  hideColumnItem,
+  autoResizeColumnItem,
+  cellSeparator,
+  headerSeparator,
+} from './components/data-grid/context-menu-utils';
 import { sampleUsers, type User as UserType } from './data/sample-data';
 
 function App() {
@@ -108,6 +127,47 @@ function App() {
     []
   );
 
+  // Define context menu items - pick and choose what you need!
+  const cellContextMenuItems = useMemo(
+    () => [
+      copyCellItem<UserType>(),
+      copyRowItem<UserType>(),
+      cellSeparator<UserType>('sep-1'),
+      editCellItem<UserType>((row, column, value) => {
+        alert(`Edit ${column.id}: ${value} for user ${row.original.firstName}`);
+      }),
+      selectRowItem<UserType>(),
+      cellSeparator<UserType>('sep-2'),
+      deleteRowItem<UserType>((row) => {
+        if (confirm(`Delete user ${row.original.firstName} ${row.original.lastName}?`)) {
+          alert('User deleted!');
+        }
+      }),
+    ],
+    []
+  );
+
+  const headerContextMenuItems = useMemo(
+    () => [
+      sortAscendingItem<UserType>(),
+      sortDescendingItem<UserType>(),
+      clearSortItem<UserType>(),
+      headerSeparator<UserType>('sep-1'),
+      filterColumnItem<UserType>((column) => {
+        alert(`Open filter dialog for ${column.id}`);
+      }),
+      clearFilterItem<UserType>(),
+      headerSeparator<UserType>('sep-2'),
+      pinLeftItem<UserType>(),
+      pinRightItem<UserType>(),
+      unpinColumnItem<UserType>(),
+      headerSeparator<UserType>('sep-3'),
+      hideColumnItem<UserType>(),
+      autoResizeColumnItem<UserType>(),
+    ],
+    []
+  );
+
   // Define actions for selected rows
   const actions: DataGridAction<UserType>[] = useMemo(
     () => [
@@ -187,6 +247,10 @@ function App() {
             enablePagination={true}
             pageSize={5}
             pageSizeOptions={[5, 10, 20, 50]}
+            cellContextMenuItems={cellContextMenuItems}
+            headerContextMenuItems={headerContextMenuItems}
+            enableCellContextMenu={true}
+            enableHeaderContextMenu={true}
             aria-label='User management table'
           />
         </div>
@@ -212,7 +276,7 @@ function App() {
             <p className='text-sm text-muted-foreground'>Client-side and server-side pagination support</p>
           </div>
           <div className='bg-card p-6 rounded-lg border'>
-            <h3 className='font-semibent mb-2'>🎨 Customizable</h3>
+            <h3 className='font-semibold mb-2'>🎨 Customizable</h3>
             <p className='text-sm text-muted-foreground'>Fully composable with shadcn/ui design system</p>
           </div>
           <div className='bg-card p-6 rounded-lg border'>

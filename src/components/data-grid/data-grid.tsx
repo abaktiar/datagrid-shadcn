@@ -28,6 +28,10 @@ export function DataGrid<TData>({
   enableMultiRowSelection = true,
   onRowSelectionChange,
   actions = [],
+  cellContextMenuItems,
+  headerContextMenuItems,
+  enableCellContextMenu = false,
+  enableHeaderContextMenu = false,
   enablePagination = true,
   pageSize = 10,
   pageSizeOptions = [10, 20, 50, 100],
@@ -151,10 +155,24 @@ export function DataGrid<TData>({
       table,
       selectedRows,
       actions,
+      cellContextMenuItems,
+      headerContextMenuItems,
+      enableCellContextMenu,
+      enableHeaderContextMenu,
       isLoading,
       error,
     }),
-    [table, selectedRows, actions, isLoading, error]
+    [
+      table,
+      selectedRows,
+      actions,
+      cellContextMenuItems,
+      headerContextMenuItems,
+      enableCellContextMenu,
+      enableHeaderContextMenu,
+      isLoading,
+      error,
+    ]
   );
 
   // Handle external callbacks
