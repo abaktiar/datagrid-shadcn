@@ -2,6 +2,10 @@
 
 A feature-rich, composable datagrid component built with TanStack Table v8, shadcn/ui, and Tailwind CSS v4. This implementation follows the comprehensive Product Requirements Document (PRD) for creating a high-performance, accessible, and customizable data grid.
 
+## 🚀 Live Demo
+
+View the live demo here: [https://datagrid-shadcn.netlify.app/](https://datagrid-shadcn.netlify.app/)
+
 ## 📦 Installation
 
 ### Using shadcn CLI (Recommended)
