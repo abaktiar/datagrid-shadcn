@@ -114,9 +114,10 @@ export function DataGridBody({ enableVirtualization = false, estimateSize = 35 }
               aria-rowindex={virtualItem.index + 2} // +2 because header is row 1
               aria-selected={row.getIsSelected()}
               className={cn(
-                'border-b border-border hover:bg-slate-100 dark:hover:bg-slate-800', // Base styling
-                row.getIsSelected() && 'bg-blue-100 text-blue-900 dark:bg-slate-700 dark:text-slate-100' // Updated dark mode selected style
+                'border-b border-border hover:bg-muted/50', // Base styling
+                row.getIsSelected() && 'data-[state=selected]:bg-accent data-[state=selected]:text-accent-foreground' // Updated dark mode selected style
               )}
+              data-state={row.getIsSelected() ? 'selected' : ''}
               style={{
                 position: 'absolute',
                 top: 0,
@@ -164,9 +165,10 @@ export function DataGridBody({ enableVirtualization = false, estimateSize = 35 }
           aria-rowindex={row.index + 2} // +2 because header is row 1
           aria-selected={row.getIsSelected()}
           className={cn(
-            'border-b border-border hover:bg-slate-100 dark:hover:bg-slate-800', // Base styling
-            row.getIsSelected() && 'bg-blue-100 text-blue-900 dark:bg-slate-700 dark:text-slate-100' // Updated dark mode selected style
-          )}>
+            'border-b border-border hover:bg-muted/50', // Base styling
+            row.getIsSelected() && 'data-[state=selected]:bg-accent data-[state=selected]:text-accent-foreground' // Updated dark mode selected style
+          )}
+          data-state={row.getIsSelected() ? 'selected' : ''}>
           {row.getVisibleCells().map((cell) => (
             <CellContextMenu
               key={cell.id}
