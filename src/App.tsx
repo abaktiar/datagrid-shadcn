@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect, useCallback } from 'react';
-import { Trash2, Download, CheckCircle, Archive, Server, Monitor, Copy, Check, Github, Heart } from 'lucide-react';
+import { Trash2, Download, CheckCircle, Archive, Server, Monitor, Copy, Check, Github, Heart, Sun, Moon } from 'lucide-react';
 import {
   DataGrid,
   DataGridColumn,
@@ -43,6 +43,21 @@ const statusOptions = [
 const StatusSelectInput = createSelectEditComponent<UserType>(statusOptions);
 
 function App() {
+  // Theme state
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
+  };
+
   // Demo state for server-side vs client-side
   const [isServerSide, setIsServerSide] = useState(false);
 
@@ -493,8 +508,28 @@ function App() {
     <div className='min-h-screen bg-background p-8'>
       <div className='max-w-7xl mx-auto space-y-8'>
         {/* Header */}
-        <div className='text-center space-y-4'>
-          <h1 className='text-4xl font-bold tracking-tight'>shadcn/ui DataGrid Component</h1>
+        <div className='relative text-center space-y-4'> {/* Added relative positioning */}
+          {/* Container for icons in the top right */}
+          <div className='absolute top-0 right-0 flex items-center p-2 space-x-2'>
+            <Button
+              variant='ghost'
+              size='icon'
+              onClick={toggleTheme}
+              aria-label='Toggle theme'
+              className='text-muted-foreground hover:text-foreground'
+            >
+              {theme === 'light' ? <Moon className='h-5 w-5' /> : <Sun className='h-5 w-5' />}
+            </Button>
+            <a
+              href='https://github.com/abaktiar/datagrid-shadcn'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='text-muted-foreground hover:text-foreground'
+            >
+              <Github className='h-6 w-6' />
+            </a>
+          </div>
+          <h1 className='text-4xl font-bold tracking-tight pt-10'>shadcn/ui DataGrid Component</h1> {/* Adjusted padding-top */}
           <p className='text-xl text-muted-foreground max-w-3xl mx-auto'>
             A feature-rich, composable datagrid built with TanStack Table v8, shadcn/ui, and Tailwind CSS v4. Supports
             sorting, filtering, pagination, row selection, bulk actions, and inline cell editing.
@@ -675,9 +710,10 @@ function App() {
         </div>
 
         {/* Footer */}
-        <footer className='mt-16 py-2 border-t'>
+        <footer className='mt-16 py-6 border-t'> {/* Increased padding */}
           <div className='max-w-4xl mx-auto px-4'>
-            <div className='flex flex-col md:flex-row items-center justify-between gap-4'>
+            {/* Changed justify-between to justify-center */}
+            <div className='flex flex-col md:flex-row items-center justify-center gap-4'>
               <div className='flex items-center gap-2 text-sm text-muted-foreground'>
                 <span>Built with</span>
                 <Heart className='h-4 w-4 text-red-500 fill-current' />
@@ -693,16 +729,7 @@ function App() {
                 <span className='font-medium text-foreground'>AI✨</span>
               </div>
 
-              <div className='flex items-center gap-4'>
-                <a
-                  href='https://github.com/abaktiar/datagrid-shadcn'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-foreground bg-background border rounded-lg hover:bg-muted transition-colors'>
-                  <Github className='h-4 w-4' />
-                  View on GitHub
-                </a>
-              </div>
+              {/* The GitHub link previously here has been removed */}
             </div>
           </div>
         </footer>
