@@ -18,11 +18,6 @@ npx shadcn@latest add https://datagrid-shadcn.netlify.app/r/data-grid.json
 
 ### Alternative Package Managers
 
-**npm:**
-```bash
-npx shadcn@latest add https://datagrid-shadcn.netlify.app/r/data-grid.json
-```
-
 **yarn:**
 ```bash
 yarn dlx shadcn@latest add https://datagrid-shadcn.netlify.app/r/data-grid.json
