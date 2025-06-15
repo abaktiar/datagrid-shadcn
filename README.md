@@ -102,8 +102,10 @@ npx shadcn@latest add http://localhost:5173/r/data-grid.json
 - ✅ **Row Selection** - Multi-row selection with checkboxes and indeterminate states
 - ✅ **Contextual Actions** - Dynamic action dock for bulk operations on selected rows
 - ✅ **Pagination** - Client-side and server-side pagination support
-- ✅ **Column Management** - Show/hide columns, column resizing
+- ✅ **Column Management** - Show/hide columns, column resizing (enabled by default and configurable)
 - ✅ **Row Virtualization** - Performance optimization for large datasets
+- ✅ **Inline Cell Editing** - Edit data directly within cells, with support for various input types, validation, and configurable behaviors
+- ✅ **Customizable Context Menus** - Add right-click menus to cells and headers, using pre-built utilities or custom items for tailored actions
 - ✅ **Accessibility** - WCAG compliant with full keyboard navigation
 
 ### Technical Features
@@ -272,17 +274,41 @@ const columns: DataGridColumn<User>[] = [
 | `actions` | `DataGridAction<TData>[]` | `[]` | Bulk actions for selected rows |
 | `enableRowSelection` | `boolean` | `false` | Enable row selection with checkboxes |
 | `enableMultiRowSelection` | `boolean` | `true` | Allow multiple row selection |
+| `onRowSelectionChange` | `(selectedRows: Row<TData>[]) => void` | `undefined` | Callback when row selection changes. |
 | `enableSorting` | `boolean` | `true` | Enable column sorting |
 | `enableMultiSort` | `boolean` | `false` | Allow sorting by multiple columns |
+| `manualSorting` | `boolean` | `false` | Set to `true` if sorting is handled externally (server-side). Requires `onSortingChange` or `onDataChange`. |
+| `onSortingChange` | `(sorting: any[]) => void` | `undefined` | Callback when sorting state changes. Used with `manualSorting`. |
 | `enableGlobalFilter` | `boolean` | `true` | Enable global search filter |
 | `enableColumnFilters` | `boolean` | `true` | Enable per-column filtering |
+| `manualFiltering` | `boolean` | `false` | Set to `true` if filtering (global and column) is handled externally (server-side). Requires `onGlobalFilterChange`, `onColumnFiltersChange`, or `onDataChange`. |
+| `onGlobalFilterChange` | `(globalFilter: string) => void` | `undefined` | Callback when global filter value changes. Used with `manualFiltering`. |
+| `onColumnFiltersChange` | `(columnFilters: any[]) => void` | `undefined` | Callback when column filters change. Used with `manualFiltering`. |
+| `onDataChange` | `(params: DataChangeParams) => void` | `undefined` | Unified callback for server-side operations when pagination, sorting, or filtering changes. See `DataChangeParams` interface. |
 | `enablePagination` | `boolean` | `true` | Enable pagination |
 | `pageSize` | `number` | `10` | Number of rows per page |
 | `pageSizeOptions` | `number[]` | `[10, 20, 50, 100]` | Available page size options |
+| `manualPagination` | `boolean` | `false` | Set to `true` if pagination is handled externally (server-side). Requires `pageCount` and `onPaginationChange` or `onDataChange`. |
+| `pageCount` | `number` | `undefined` | Total number of pages, required for `manualPagination`. |
+| `totalCount` | `number` | `undefined` | Total number of records in the dataset, useful for display with server-side pagination. |
+| `onPaginationChange` | `(pageIndex: number, pageSize: number) => void` | `undefined` | Callback when pagination state (page index or size) changes. Used with `manualPagination`. |
 | `enableVirtualization` | `boolean` | `false` | Enable row virtualization for large datasets |
 | `estimateSize` | `number` | `35` | Estimated row height for virtualization |
 | `isLoading` | `boolean` | `false` | Show loading state |
 | `error` | `string \| null` | `null` | Error message to display |
+| `enableCellEditing` | `boolean` | `false` | Master switch to enable/disable cell editing. |
+| `defaultEditMode` | `CellEditMode` | `'click'` | Default mode for triggering cell editing (e.g., 'click', 'doubleClick'). |
+| `onCellEdit` | `(value: any, row: Row<TData>, column: Column<TData>) => Promise<boolean> \| boolean` | `undefined` | Callback when a cell's value is successfully edited and saved. Return `false` to indicate save failure. |
+| `onCellEditError` | `(error: string, row: Row<TData>, column: Column<TData>) => void` | `undefined` | Callback when an error occurs during cell editing. |
+| `enableCellContextMenu` | `boolean` | `false` | Enable right-click context menus on data cells. |
+| `enableHeaderContextMenu` | `boolean` | `false` | Enable right-click context menus on column headers. |
+| `cellContextMenuItems` | `CellContextMenuItem<TData>[]` | `[]` | Array of items for cell context menus. |
+| `headerContextMenuItems` | `HeaderContextMenuItem<TData>[]` | `[]` | Array of items for header context menus. |
+| `enableColumnResizing` | `boolean` | `true` | Enable/disable column resizing for the entire grid. |
+| `onColumnSizingChange` | `(columnSizing: Record<string, number>) => void` | `undefined` | Callback when column sizes change due to resizing. |
+| `className` | `string` | `undefined` | Custom CSS class name for the main DataGrid container. |
+| `'aria-label'` | `string` | `'Data grid'` |  ARIA label for the DataGrid region. |
+| `'aria-describedby'` | `string` | `undefined` | ARIA describedby attribute for the DataGrid region. |
 
 ### DataGridColumn Interface
 
@@ -294,6 +320,7 @@ interface DataGridColumn<TData> {
   cell?: ({ row }: { row: Row<TData> }) => ReactNode
   enableSorting?: boolean
   enableFiltering?: boolean
+  enableEditing?: boolean | CellEditConfig<TData> // Enable or configure cell editing for this column. See `CellEditConfig<TData>` for advanced options.
   enableHiding?: boolean
   enableResizing?: boolean
   size?: number
@@ -315,6 +342,63 @@ interface DataGridAction<TData> {
   isVisible?: (selectedRows: Row<TData>[]) => boolean
 }
 ```
+
+### DataChangeParams Interface
+This interface defines the object passed to the `onDataChange` callback, used for server-side data operations.
+
+| Property     | Type                                  | Description                                                                 |
+|--------------|---------------------------------------|-----------------------------------------------------------------------------|
+| `pagination` | `{ pageIndex: number; pageSize: number }` | Contains the current page index and page size.                               |
+| `sorting`    | `Array<{ id: string; desc: boolean }>` | Array of sorting objects, each with a column `id` and `desc` (descending) flag. |
+| `filters`    | `Array<{ id:string; value: any }>`    | Array of column filter objects, each with a column `id` and filter `value`.   |
+| `globalFilter` | `string`                              | The current global filter string.                                           |
+
+### CellEditConfig<TData> Interface
+Used to configure cell editing behavior for a column via the `DataGridColumn.enableEditing` prop.
+
+| Property      | Type                                                                 | Description                                                                                                                              |
+|---------------|----------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
+| `enabled`     | `boolean`                                                            | Whether editing is enabled for this column.                                                                                                |
+| `behavior`    | `CellEditBehavior`                                                   | Defines how editing is triggered and saved (e.g., 'click', 'doubleClick', save on blur/enter). See `EditBehaviors` in `types.ts`.        |
+| `component`   | `ComponentType<CellEditComponentProps<TData, TValue>>`               | Custom React component for the cell editor. Defaults to a text input. See `edit-components.tsx` for more.                          |
+| `validate`    | `(value: TValue, row: Row<TData>) => string \| null`                   | Function to validate the edited value. Return an error string or `null`.                                                                 |
+| `onSave`      | `(value: TValue, row: Row<TData>, column: Column<TData>) => Promise<boolean> \| boolean` | Callback when an edit is saved for this specific column. Overrides global `onCellEdit` for this column if provided. Return `false` for failure. |
+| `placeholder` | `string`                                                             | Placeholder text for the edit input.                                                                                                   |
+| `disabled`    | `(row: Row<TData>) => boolean`                                       | Function to conditionally disable editing for specific rows.                                                                             |
+
+*Note: For more advanced `CellEditConfig` options like `onCancel`, `onEditStart`, `onEditEnd`, and `EditBehaviors`, please refer to `src/components/data-grid/types.ts` and the cell editing implementation.*
+
+### CellContextMenuItem<TData> Interface
+Defines an item for a cell context menu, used with the `cellContextMenuItems` prop.
+
+| Property    | Type                                                              | Description                                                            |
+|-------------|-------------------------------------------------------------------|------------------------------------------------------------------------|
+| `id`        | `string`                                                          | Unique ID for the menu item.                                           |
+| `label`     | `string`                                                          | Text displayed for the menu item.                                      |
+| `icon`      | `ReactNode`                                                       | Optional icon to display next to the label.                            |
+| `onClick`   | `(row: Row<TData>, column: Column<TData>, value: any) => void \| Promise<void>` | Function called when the item is clicked.                              |
+| `isEnabled` | `(row: Row<TData>, column: Column<TData>, value: any) => boolean` | Optional function to determine if the item is enabled.                 |
+| `isVisible` | `(row: Row<TData>, column: Column<TData>, value: any) => boolean` | Optional function to determine if the item is visible.                 |
+| `separator` | `boolean`                                                         | If `true`, renders a separator instead of a clickable item.            |
+| `variant`   | `'default' \| 'destructive'`                                      | Optional variant, e.g., for destructive actions.                     |
+
+*Tip: Utility functions in `src/components/data-grid/context-menu-utils.tsx` (like `copyCellItem()`) provide pre-configured `CellContextMenuItem` objects.*
+
+### HeaderContextMenuItem<TData> Interface
+Defines an item for a header context menu, used with the `headerContextMenuItems` prop.
+
+| Property    | Type                                                     | Description                                                            |
+|-------------|----------------------------------------------------------|------------------------------------------------------------------------|
+| `id`        | `string`                                                 | Unique ID for the menu item.                                           |
+| `label`     | `string`                                                 | Text displayed for the menu item.                                      |
+| `icon`      | `ReactNode`                                              | Optional icon to display next to the label.                            |
+| `onClick`   | `(column: Column<TData>) => void \| Promise<void>`       | Function called when the item is clicked.                              |
+| `isEnabled` | `(column: Column<TData>) => boolean`                     | Optional function to determine if the item is enabled.                 |
+| `isVisible` | `(column: Column<TData>) => boolean`                     | Optional function to determine if the item is visible.                 |
+| `separator` | `boolean`                                                | If `true`, renders a separator instead of a clickable item.            |
+| `variant`   | `'default' \| 'destructive'`                             | Optional variant, e.g., for destructive actions.                     |
+
+*Tip: Utility functions in `src/components/data-grid/context-menu-utils.tsx` (like `sortAscendingItem()`) provide pre-configured `HeaderContextMenuItem` objects.*
 
 ## 🏗️ Architecture
 
