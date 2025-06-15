@@ -47,7 +47,7 @@ npm install @tanstack/react-table @tanstack/react-virtual lucide-react class-var
 npx shadcn@latest add button checkbox input select context-menu dropdown-menu
 ```
 
-3. Copy the component files from this repository to your project.
+3. Copy the data-grid component files from this repository to your project.
 
 ## 🚀 Registry Deployment
 
