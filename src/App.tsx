@@ -509,6 +509,12 @@ function App() {
       <div className='max-w-7xl mx-auto space-y-8'>
         {/* Header */}
         <div className='relative text-center space-y-4'> {/* Added relative positioning */}
+          <div className='absolute top-0 left-0 p-4 z-10'>
+            <img
+              src='https://visitor-badge.laobi.icu/badge?page_id=abaktiar.datagrid-shadcn'
+              alt='Visitor count'
+            />
+          </div>
           {/* Container for icons in the top right */}
           <div className='absolute top-0 right-0 flex items-center p-2 space-x-2'>
             <Button
@@ -728,7 +734,6 @@ function App() {
                 <span>&</span>
                 <span className='font-medium text-foreground'>AI✨</span>
               </div>
-
               {/* The GitHub link previously here has been removed */}
             </div>
           </div>
