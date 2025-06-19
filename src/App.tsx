@@ -728,7 +728,11 @@ function App() {
                 <span>&</span>
                 <span className='font-medium text-foreground'>AI✨</span>
               </div>
-
+              <img
+                src='https://visitor-badge.laobi.icu/badge?page_id=abaktiar.datagrid-shadcn'
+                alt='Visitor count'
+                className='mx-auto my-2' // Added margin for spacing and auto horizontal margins for centering
+              />
               {/* The GitHub link previously here has been removed */}
             </div>
           </div>
