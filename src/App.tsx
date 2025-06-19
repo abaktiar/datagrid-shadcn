@@ -84,9 +84,9 @@ function App() {
     }
   };
 
-  const [serverData, setServerData] = useState(sampleUsers.slice(0, 15)); // Start with first page
+  const [serverData, setServerData] = useState(sampleUsers.slice(0, 5)); // Start with first page, updated to 5
   const [totalCount, setTotalCount] = useState(sampleUsers.length);
-  const [pageCount, setPageCount] = useState(Math.ceil(sampleUsers.length / 15));
+  const [pageCount, setPageCount] = useState(Math.ceil(sampleUsers.length / 5)); // Updated to 5
   const [isLoading, setIsLoading] = useState(false);
   const [clientData, setClientData] = useState(sampleUsers); // For client-side editing
 
@@ -188,16 +188,16 @@ function App() {
     if (isServerSide) {
       // Trigger initial data load for server-side mode
       handleDataChange({
-        pagination: { pageIndex: 0, pageSize: 15 },
+        pagination: { pageIndex: 0, pageSize: 5 }, // Updated to 5
         sorting: [],
         filters: [],
         globalFilter: '',
       });
     } else {
       // Reset to client-side data
-      setServerData(sampleUsers.slice(0, 15));
+      setServerData(sampleUsers.slice(0, 5)); // Updated to 5
       setTotalCount(sampleUsers.length);
-      setPageCount(Math.ceil(sampleUsers.length / 15));
+      setPageCount(Math.ceil(sampleUsers.length / 5)); // Updated to 5
       setIsLoading(false); // Ensure loading is false for client-side
     }
   }, [isServerSide]);
@@ -578,8 +578,8 @@ function App() {
             enableGlobalFilter={true}
             enableColumnFilters={true}
             enablePagination={true}
-            pageSize={15}
-            pageSizeOptions={[10, 15, 25, 50]}
+            pageSize={5} // Updated to 5
+            pageSizeOptions={[5, 10, 15, 25]} // Updated pageSizeOptions
             // Cell editing
             enableCellEditing={true}
             defaultEditMode='click'
