@@ -157,7 +157,7 @@ export function DataGrid<TData>({
     manualPagination,
     manualSorting,
     manualFiltering,
-    pageCount: pageCount ?? -1,
+    pageCount: manualPagination ? (pageCount ?? -1) : undefined,
     meta: {
       totalCount,
     },
