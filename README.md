@@ -4,7 +4,7 @@ A feature-rich, composable datagrid component built with TanStack Table v8, shad
 
 ## 🚀 Live Demo
 
-View the live demo here: [https://datagrid-shadcn.netlify.app/](https://datagrid-shadcn.netlify.app/)
+View the live demo here: [https://abaktiar.github.io/datagrid-shadcn/](https://abaktiar.github.io/datagrid-shadcn/)
 
 ## 📦 Installation
 
@@ -13,24 +13,24 @@ View the live demo here: [https://datagrid-shadcn.netlify.app/](https://datagrid
 Install the DataGrid component directly into your project:
 
 ```bash
-npx shadcn@latest add https://datagrid-shadcn.netlify.app/r/data-grid.json
+npx shadcn@latest add https://abaktiar.github.io/datagrid-shadcn/r/data-grid.json
 ```
 
 ### Alternative Package Managers
 
 **yarn:**
 ```bash
-yarn dlx shadcn@latest add https://datagrid-shadcn.netlify.app/r/data-grid.json
+yarn dlx shadcn@latest add https://abaktiar.github.io/datagrid-shadcn/r/data-grid.json
 ```
 
 **pnpm:**
 ```bash
-pnpm dlx shadcn@latest add https://datagrid-shadcn.netlify.app/r/data-grid.json
+pnpm dlx shadcn@latest add https://abaktiar.github.io/datagrid-shadcn/r/data-grid.json
 ```
 
 **bun:**
 ```bash
-bunx shadcn@latest add https://datagrid-shadcn.netlify.app/r/data-grid.json
+bunx shadcn@latest add https://abaktiar.github.io/datagrid-shadcn/r/data-grid.json
 ```
 
 ### Manual Installation
@@ -55,7 +55,7 @@ npx shadcn@latest add button checkbox input select context-menu dropdown-menu
 
 The DataGrid component is deployed and available at:
 ```
-https://datagrid-shadcn.netlify.app/r/data-grid.json
+https://abaktiar.github.io/datagrid-shadcn/r/data-grid.json
 ```
 
 ### Build Registry Locally
