@@ -114,7 +114,7 @@ const features = [
 
 function App() {
   // Theme state
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
   useEffect(() => {
     if (theme === 'dark') {
