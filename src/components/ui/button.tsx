@@ -1,5 +1,4 @@
-import * as React from "react"
-import { useRender } from "@base-ui/react/use-render"
+import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
@@ -35,37 +34,19 @@ const buttonVariants = cva(
   }
 )
 
-type ButtonProps = React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
-    render?: useRender.RenderProp
-  }
-
 function Button({
   className,
-  variant,
-  size,
-  asChild = false,
-  render,
-  children,
+  variant = "default",
+  size = "default",
   ...props
-}: ButtonProps) {
-  const resolvedRender =
-    render ??
-    (asChild && React.isValidElement(children)
-      ? (children as React.ReactElement)
-      : undefined)
-
-  return useRender({
-    render: resolvedRender,
-    defaultTagName: "button",
-    props: {
-      "data-slot": "button",
-      className: cn(buttonVariants({ variant, size, className })),
-      ...(resolvedRender ? {} : { children }),
-      ...props,
-    },
-  })
+}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+  return (
+    <ButtonPrimitive
+      data-slot="button"
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    />
+  )
 }
 
 export { Button, buttonVariants }
