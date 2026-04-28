@@ -1,21 +1,41 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Input } from '../ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Checkbox } from '../ui/checkbox';
 import { Button } from '../ui/button';
 import { Check, X } from 'lucide-react';
 import { cn } from '../../lib/utils';
-import { CellEditComponentProps, EditBehaviors } from './types';
+import { CellEditBehavior, CellEditComponentProps, EditBehaviors } from './types';
 
-// Text Input Component with flexible behavior
+// Shared keyboard / blur behavior used by all standard edit inputs
+function useEditBehavior(behavior: CellEditBehavior, cancel: () => void, changeAndCommit: () => void) {
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && behavior.saveOn?.includes('enter')) {
+      e.preventDefault();
+      changeAndCommit();
+    } else if (e.key === 'Escape' && behavior.cancelOn?.includes('escape')) {
+      e.preventDefault();
+      cancel();
+    }
+  };
+
+  const onBlur = () => {
+    if (behavior.saveOn?.includes('blur')) {
+      changeAndCommit();
+    }
+  };
+
+  return { onKeyDown, onBlur };
+}
+
+// ---------------- Text ----------------
 export function TextEditInput<TData>({
   value,
   onChange,
   onSave,
   onCancel,
-  onExit,
   config,
   isSaving,
   error,
@@ -24,94 +44,55 @@ export function TextEditInput<TData>({
   autoFocus = true,
   selectAllOnFocus = true,
 }: CellEditComponentProps<TData, string>) {
-  const [inputValue, setInputValue] = useState(String(value || ''));
+  const [inputValue, setInputValue] = useState(String(value ?? ''));
   const inputRef = useRef<HTMLInputElement>(null);
-
   const behavior = config.behavior || EditBehaviors.clickToEdit;
 
   useEffect(() => {
     if (autoFocus && inputRef.current) {
       inputRef.current.focus();
-      if (selectAllOnFocus) {
-        inputRef.current.select();
-      }
+      if (selectAllOnFocus) inputRef.current.select();
     }
   }, [autoFocus, selectAllOnFocus]);
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && behavior.saveOn?.includes('enter')) {
-      e.preventDefault();
-      onChange(inputValue);
-      onSave();
-    } else if (e.key === 'Escape' && behavior.cancelOn?.includes('escape')) {
-      e.preventDefault();
-      onCancel();
-    }
+  const commitImmediate = () => {
+    onChange(inputValue);
+    onSave();
   };
 
-  const handleBlur = () => {
-    if (behavior.saveOn?.includes('blur')) {
-      onChange(inputValue);
-      onSave();
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setInputValue(newValue);
-    onChange(newValue);
-
-    if (behavior.saveOn?.includes('immediate')) {
-      onSave();
-    }
-  };
+  const { onKeyDown, onBlur } = useEditBehavior(behavior, onCancel, commitImmediate);
 
   return (
-    <div className="flex items-center gap-1 w-full relative">
+    <div className='flex items-center gap-1 w-full relative'>
       <Input
         ref={inputRef}
         value={inputValue}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        onBlur={handleBlur}
+        onChange={(e) => {
+          setInputValue(e.target.value);
+          onChange(e.target.value);
+          if (behavior.saveOn?.includes('immediate')) onSave();
+        }}
+        onKeyDown={onKeyDown}
+        onBlur={onBlur}
         placeholder={placeholder}
         disabled={disabled || isSaving}
-        className={cn(
-          "h-8 text-sm border-primary",
-          error && "border-destructive",
-          isSaving && "opacity-50"
-        )}
+        className={cn('h-8 text-sm border-primary', error && 'border-destructive', isSaving && 'opacity-50')}
         autoFocus={autoFocus}
       />
 
       {behavior.showActionButtons && (
-        <div className="flex items-center gap-1 ml-1">
-          <Button
-            size="sm"
-            variant="ghost"
-            className="h-6 w-6 p-0"
-            onClick={() => {
-              onChange(inputValue);
-              onSave();
-            }}
-            disabled={isSaving}
-          >
-            <Check className="h-3 w-3" />
+        <div className='flex items-center gap-1 ml-1'>
+          <Button size='sm' variant='ghost' className='h-6 w-6 p-0' onClick={commitImmediate} disabled={isSaving}>
+            <Check className='h-3 w-3' />
           </Button>
-          <Button
-            size="sm"
-            variant="ghost"
-            className="h-6 w-6 p-0"
-            onClick={onCancel}
-            disabled={isSaving}
-          >
-            <X className="h-3 w-3" />
+          <Button size='sm' variant='ghost' className='h-6 w-6 p-0' onClick={onCancel} disabled={isSaving}>
+            <X className='h-3 w-3' />
           </Button>
         </div>
       )}
 
       {error && (
-        <div className="absolute top-full left-0 z-10 mt-1 p-2 text-xs text-destructive bg-destructive/10 border border-destructive/20 rounded">
+        <div className='absolute top-full left-0 z-10 mt-1 p-2 text-xs text-destructive bg-destructive/10 border border-destructive/20 rounded'>
           {error}
         </div>
       )}
@@ -119,18 +100,20 @@ export function TextEditInput<TData>({
   );
 }
 
-// Number Input Component
+// ---------------- Number ----------------
 export function NumberEditInput<TData>({
   value,
   onChange,
   onSave,
   onCancel,
+  config,
   placeholder,
   disabled,
   autoFocus = true,
 }: CellEditComponentProps<TData, number>) {
-  const [inputValue, setInputValue] = useState(String(value || ''));
+  const [inputValue, setInputValue] = useState(value == null ? '' : String(value));
   const inputRef = useRef<HTMLInputElement>(null);
+  const behavior = config.behavior || EditBehaviors.clickToEdit;
 
   useEffect(() => {
     if (autoFocus && inputRef.current) {
@@ -139,41 +122,31 @@ export function NumberEditInput<TData>({
     }
   }, [autoFocus]);
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const numValue = parseFloat(inputValue);
-      onChange(isNaN(numValue) ? 0 : numValue);
-      onSave();
-    } else if (e.key === 'Escape') {
-      e.preventDefault();
-      onCancel();
-    }
-  };
-
-  const handleBlur = () => {
-    const numValue = parseFloat(inputValue);
-    onChange(isNaN(numValue) ? 0 : numValue);
+  const commitImmediate = () => {
+    const num = parseFloat(inputValue);
+    onChange(isNaN(num) ? 0 : num);
     onSave();
   };
+
+  const { onKeyDown, onBlur } = useEditBehavior(behavior, onCancel, commitImmediate);
 
   return (
     <Input
       ref={inputRef}
-      type="number"
+      type='number'
       value={inputValue}
       onChange={(e) => setInputValue(e.target.value)}
-      onKeyDown={handleKeyDown}
-      onBlur={handleBlur}
+      onKeyDown={onKeyDown}
+      onBlur={onBlur}
       placeholder={placeholder}
       disabled={disabled}
-      className="h-8 text-sm border-primary"
+      className='h-8 text-sm border-primary'
       autoFocus={autoFocus}
     />
   );
 }
 
-// Select/Dropdown Component
+// ---------------- Select ----------------
 interface SelectOption {
   value: string;
   label: string;
@@ -214,13 +187,8 @@ export function SelectEditInput<TData>({
       onValueChange={handleValueChange}
       open={isOpen}
       onOpenChange={setIsOpen}
-      disabled={disabled}
-    >
-      <SelectTrigger 
-        className="h-8 text-sm border-primary"
-        onKeyDown={handleKeyDown}
-        autoFocus
-      >
+      disabled={disabled}>
+      <SelectTrigger className='h-8 text-sm border-primary' onKeyDown={handleKeyDown} autoFocus>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
@@ -234,7 +202,7 @@ export function SelectEditInput<TData>({
   );
 }
 
-// Checkbox Component
+// ---------------- Checkbox ----------------
 export function CheckboxEditInput<TData>({
   value,
   onChange,
@@ -247,80 +215,68 @@ export function CheckboxEditInput<TData>({
   };
 
   return (
-    <div className="flex items-center justify-center h-8">
-      <Checkbox
-        checked={Boolean(value)}
-        onCheckedChange={handleCheckedChange}
-        disabled={disabled}
-        className="border-primary"
-      />
+    <div className='flex items-center justify-center h-8'>
+      <Checkbox checked={Boolean(value)} onCheckedChange={handleCheckedChange} disabled={disabled} className='border-primary' />
     </div>
   );
 }
 
-// Date Input Component
+// ---------------- Date ----------------
 export function DateEditInput<TData>({
   value,
   onChange,
   onSave,
   onCancel,
+  config,
   placeholder,
   disabled,
   autoFocus = true,
 }: CellEditComponentProps<TData, string>) {
   const [inputValue, setInputValue] = useState(value || '');
   const inputRef = useRef<HTMLInputElement>(null);
+  const behavior = config.behavior || EditBehaviors.clickToEdit;
 
   useEffect(() => {
-    if (autoFocus && inputRef.current) {
-      inputRef.current.focus();
-    }
+    if (autoFocus && inputRef.current) inputRef.current.focus();
   }, [autoFocus]);
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      onChange(inputValue);
-      onSave();
-    } else if (e.key === 'Escape') {
-      e.preventDefault();
-      onCancel();
-    }
-  };
-
-  const handleBlur = () => {
+  const commitImmediate = () => {
     onChange(inputValue);
     onSave();
   };
 
+  const { onKeyDown, onBlur } = useEditBehavior(behavior, onCancel, commitImmediate);
+
   return (
     <Input
       ref={inputRef}
-      type="date"
+      type='date'
       value={inputValue}
       onChange={(e) => setInputValue(e.target.value)}
-      onKeyDown={handleKeyDown}
-      onBlur={handleBlur}
+      onKeyDown={onKeyDown}
+      onBlur={onBlur}
       placeholder={placeholder}
       disabled={disabled}
-      className="h-8 text-sm border-primary"
+      className='h-8 text-sm border-primary'
       autoFocus={autoFocus}
     />
   );
 }
 
-// Email Input Component
+// ---------------- Email ----------------
 export function EmailEditInput<TData>({
   value,
   onChange,
   onSave,
   onCancel,
+  config,
   placeholder,
   disabled,
   autoFocus = true,
 }: CellEditComponentProps<TData, string>) {
-  const [inputValue, setInputValue] = useState(String(value || ''));
+  const [inputValue, setInputValue] = useState(String(value ?? ''));
   const inputRef = useRef<HTMLInputElement>(null);
+  const behavior = config.behavior || EditBehaviors.clickToEdit;
 
   useEffect(() => {
     if (autoFocus && inputRef.current) {
@@ -329,60 +285,43 @@ export function EmailEditInput<TData>({
     }
   }, [autoFocus]);
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      onChange(inputValue);
-      onSave();
-    } else if (e.key === 'Escape') {
-      e.preventDefault();
-      onCancel();
-    }
-  };
-
-  const handleBlur = () => {
+  const commitImmediate = () => {
     onChange(inputValue);
     onSave();
   };
 
+  const { onKeyDown, onBlur } = useEditBehavior(behavior, onCancel, commitImmediate);
+
   return (
     <Input
       ref={inputRef}
-      type="email"
+      type='email'
       value={inputValue}
       onChange={(e) => setInputValue(e.target.value)}
-      onKeyDown={handleKeyDown}
-      onBlur={handleBlur}
+      onKeyDown={onKeyDown}
+      onBlur={onBlur}
       placeholder={placeholder}
       disabled={disabled}
-      className="h-8 text-sm border-primary"
+      className='h-8 text-sm border-primary'
       autoFocus={autoFocus}
     />
   );
 }
 
-// Utility function to create a select component with predefined options
+// ---------------- Helpers ----------------
 export function createSelectEditComponent<TData>(options: SelectOption[]) {
   return function SelectComponent(props: CellEditComponentProps<TData, string>) {
     return <SelectEditInput {...props} options={options} />;
   };
 }
 
-// Utility function to create a number input with min/max validation
 export function createNumberEditComponent<TData>(min?: number, max?: number) {
   return function NumberComponent(props: CellEditComponentProps<TData, number>) {
-    const validate = (value: number) => {
-      if (min !== undefined && value < min) return false;
-      if (max !== undefined && value > max) return false;
-      return true;
+    const handleChange = (next: number) => {
+      if (min !== undefined && next < min) return;
+      if (max !== undefined && next > max) return;
+      props.onChange(next);
     };
-
-    const handleChange = (value: number) => {
-      if (validate(value)) {
-        props.onChange(value);
-      }
-    };
-
     return <NumberEditInput {...props} onChange={handleChange} />;
   };
 }

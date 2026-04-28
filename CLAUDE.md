@@ -77,3 +77,18 @@ Context menu items are individual utility functions in `context-menu-utils.tsx`:
 ## Path Alias
 
 `@/*` maps to `./src/*` (configured in tsconfig and vite.config)
+
+## Portability — Bundler-Agnostic Code
+
+This is a shadcn registry component installed into other projects via `npx shadcn@latest add`. Consumers may use **Next.js, Vite, Remix, CRA, or any other bundler** — all source files under `src/components/data-grid/` MUST stay bundler-agnostic.
+
+**Do NOT use Vite-specific APIs in component code:**
+- ❌ `import.meta.env.DEV` / `import.meta.env.PROD` / `import.meta.env.*` (Vite-only; undefined in Next.js, breaks consumer builds)
+- ❌ `import.meta.glob`, `?raw`, `?url`, `?worker` imports
+- ❌ `vite/client` types
+
+**Use universal alternatives:**
+- ✅ `process.env.NODE_ENV !== 'production'` for dev-only checks (defined by Next.js, shimmed by Vite, supported by Webpack/CRA via DefinePlugin)
+- ✅ Standard ESM imports
+
+The Vite dev server / build pipeline in this repo is for **demoing and registry building only** — Vite-specific code may appear in `vite.config.*`, `index.html`, and the demo `src/App.tsx`, but never inside `src/components/data-grid/`.

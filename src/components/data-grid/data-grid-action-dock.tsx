@@ -1,21 +1,32 @@
+'use client';
+
 import { X, MoreHorizontal } from 'lucide-react';
 import { Button } from '../ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
 import { useDataGrid } from './context';
-import { DataGridAction } from './types';
+import { DataGridAction, DockOptions } from './types';
+import { cn } from '../../lib/utils';
 
-export function DataGridActionDock() {
-  const { selectedRows, actions, table } = useDataGrid();
+interface DataGridActionDockProps {
+  dockOptions?: DockOptions;
+}
 
-  if (selectedRows.length === 0 || actions.length === 0) {
-    return null;
-  }
+export function DataGridActionDock({ dockOptions }: DataGridActionDockProps) {
+  const { selectedRows, actions, table, labels } = useDataGrid();
 
-  // Filter actions based on visibility and enablement
+  if (selectedRows.length === 0 || actions.length === 0) return null;
+
+  const primaryCount = dockOptions?.primaryActionCount ?? 3;
+  const position = dockOptions?.position ?? 'bottom';
+
   const visibleActions = actions.filter((action) => (action.isVisible ? action.isVisible(selectedRows) : true));
-
-  const primaryActions = visibleActions.slice(0, 3); // Show first 3 actions as dock items
-  const overflowActions = visibleActions.slice(3); // Rest go in dropdown
+  const primaryActions = visibleActions.slice(0, primaryCount);
+  const overflowActions = visibleActions.slice(primaryCount);
 
   const handleActionClick = async (action: DataGridAction<any>) => {
     try {
@@ -25,25 +36,24 @@ export function DataGridActionDock() {
     }
   };
 
-  const clearSelection = () => {
-    table.resetRowSelection();
-  };
+  const clearSelection = () => table.resetRowSelection();
 
   return (
-    <div className='fixed bottom-4 left-1/2 -translate-x-1/2 z-50'>
+    <div
+      className={cn(
+        'fixed left-1/2 -translate-x-1/2 z-50',
+        position === 'bottom' ? 'bottom-4' : 'top-4'
+      )}>
       <div className='flex items-center gap-2 px-3 py-2 bg-background border border-border rounded-md shadow-md'>
-        <Button variant='ghost' size='sm' onClick={clearSelection} aria-label='Clear selection' className='h-8 px-2'>
+        <Button variant='ghost' size='sm' onClick={clearSelection} aria-label={labels.clearSelection} className='h-8 px-2'>
           {selectedRows.length} selected <X className='h-3 w-3 ml-1' />
         </Button>
 
-        {/* Dock Separator */}
         <div className='w-px h-4 bg-border' />
 
-        {/* Primary Actions */}
         <div className='flex items-center gap-1'>
           {primaryActions.map((action) => {
             const isEnabled = action.isEnabled ? action.isEnabled(selectedRows) : true;
-
             return (
               <Button
                 key={action.id}
@@ -59,7 +69,6 @@ export function DataGridActionDock() {
           })}
         </div>
 
-        {/* Overflow Actions */}
         {overflowActions.length > 0 && (
           <>
             <div className='w-px h-4 bg-border' />
@@ -67,13 +76,12 @@ export function DataGridActionDock() {
               <DropdownMenuTrigger asChild>
                 <Button variant='ghost' size='sm' className='h-8 px-2'>
                   <MoreHorizontal className='h-3 w-3 mr-1' />
-                  <span className='text-xs'>More</span>
+                  <span className='text-xs'>{labels.more}</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align='center' side='top' sideOffset={4}>
+              <DropdownMenuContent align='center' side={position === 'bottom' ? 'top' : 'bottom'} sideOffset={4}>
                 {overflowActions.map((action) => {
                   const isEnabled = action.isEnabled ? action.isEnabled(selectedRows) : true;
-
                   return (
                     <DropdownMenuItem key={action.id} onClick={() => handleActionClick(action)} disabled={!isEnabled}>
                       {action.icon && <span className='h-3 w-3 mr-2'>{action.icon}</span>}

@@ -6,6 +6,7 @@ export { DataGridPagination } from './data-grid-pagination';
 export { DataGridFilters } from './data-grid-filters';
 export { DataGridActionDock } from './data-grid-action-dock';
 export { CellContextMenu, HeaderContextMenu } from './data-grid-context-menu';
+export { ColumnFilter } from './column-filter';
 
 // Editing components
 export { EditableCell, DefaultTextInput } from './data-grid-editable-cell';
@@ -33,6 +34,17 @@ export {
 // Context and hooks
 export { useDataGrid } from './context';
 
+// Persistence
+export { useGridPersistence } from './use-grid-persistence';
+export type { PersistedState, PersistKey, UseGridPersistenceOptions } from './use-grid-persistence';
+
+// Export utilities
+export { exportToCSV, exportToJSON, copySelectionAsTSV } from './export-utils';
+export type { ExportOptions } from './export-utils';
+
+// i18n
+export { defaultLabels, mergeLabels } from './labels';
+
 // Types
 export type {
   DataGridProps,
@@ -49,9 +61,16 @@ export type {
   CellEditTrigger,
   CellEditBehavior,
   QuickEditConfig,
+  ColumnFilterConfig,
+  ColumnFilterType,
+  ColumnFilterOption,
+  DataGridLabels,
+  DataGridDensity,
+  DockOptions,
+  FocusedCell,
+  CellRange,
 } from './types';
 
-// Export EditBehaviors constant
 export { EditBehaviors } from './types';
 
 // Context menu utilities

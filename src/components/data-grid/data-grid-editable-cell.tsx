@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { Row, Column } from '@tanstack/react-table';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
@@ -14,9 +14,11 @@ interface EditableCellProps<TData> {
   column: Column<TData>;
   value: any;
   editConfig: CellEditConfig<TData>;
+  /** Pre-rendered display content from the body (uses column.cell with full TanStack context) */
+  displayContent?: ReactNode;
 }
 
-// Default input component for text editing with full control
+// Default text input — used when no custom component is provided
 export function DefaultTextInput<TData>({
   value,
   onChange,
@@ -30,7 +32,7 @@ export function DefaultTextInput<TData>({
   autoFocus = true,
   selectAllOnFocus = true,
 }: CellEditComponentProps<TData, string>) {
-  const [inputValue, setInputValue] = useState(String(value || ''));
+  const [inputValue, setInputValue] = useState(String(value ?? ''));
   const inputRef = useRef<HTMLInputElement>(null);
 
   const behavior = config.behavior || EditBehaviors.clickToEdit;
@@ -38,9 +40,7 @@ export function DefaultTextInput<TData>({
   useEffect(() => {
     if (autoFocus && inputRef.current) {
       inputRef.current.focus();
-      if (selectAllOnFocus) {
-        inputRef.current.select();
-      }
+      if (selectAllOnFocus) inputRef.current.select();
     }
   }, [autoFocus, selectAllOnFocus]);
 
@@ -63,14 +63,13 @@ export function DefaultTextInput<TData>({
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setInputValue(newValue);
-    onChange(newValue);
+    const next = e.target.value;
+    setInputValue(next);
+    onChange(next);
   };
 
   return (
     <div className='w-full relative'>
-      {/* Input positioned at top of cell */}
       <div className='absolute top-0 left-0 right-0 z-20'>
         <Input
           ref={inputRef}
@@ -89,12 +88,12 @@ export function DefaultTextInput<TData>({
         />
       </div>
 
-      {/* Action buttons positioned at top-right or bottom-right */}
       {behavior.showActionButtons && (
         <div
-          className={`absolute ${
+          className={cn(
+            'absolute z-30 bg-background border border-border rounded-md shadow-lg p-1 flex items-center gap-1',
             behavior.buttonPosition === 'bottom-right' ? 'top-9 right-0' : 'top-0 right-0'
-          } z-30 bg-background border border-border rounded-md shadow-lg p-1 flex items-center gap-1`}>
+          )}>
           <Button
             size='sm'
             variant='ghost'
@@ -112,7 +111,6 @@ export function DefaultTextInput<TData>({
         </div>
       )}
 
-      {/* Error message positioned below input */}
       {error && (
         <div className='absolute top-9 left-0 right-0 z-30 p-2 text-xs text-destructive bg-destructive/10 border border-destructive/20 rounded-md shadow-lg'>
           {error}
@@ -122,40 +120,44 @@ export function DefaultTextInput<TData>({
   );
 }
 
-// Editable cell wrapper component with full developer control
-export function EditableCell<TData>({
-  row,
-  column,
-  value,
-  editConfig
-}: EditableCellProps<TData>) {
-  const { editingCell, setEditingCell, onCellEdit, onCellEditError, defaultEditMode } = useDataGrid<TData>();
-  const [currentValue, setCurrentValue] = useState(value);
+export function EditableCell<TData>({ row, column, value, editConfig, displayContent }: EditableCellProps<TData>) {
+  const {
+    editingCell,
+    setEditingCell,
+    onCellEdit,
+    onCellValueChange,
+    onCellEditError,
+    defaultEditMode,
+  } = useDataGrid<TData>();
+
+  const [draftValue, setDraftValue] = useState(value);
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  // Get behavior configuration with defaults
+  const cellRef = useRef<HTMLDivElement>(null);
+
   const behavior = editConfig.behavior || EditBehaviors.clickToEdit;
   const mode = behavior.mode || defaultEditMode;
 
-  const isCurrentlyEditing = editingCell?.rowId === row.id && editingCell?.columnId === column.id;
-  const isEditing = isCurrentlyEditing;
+  const isEditing = editingCell?.rowId === row.id && editingCell?.columnId === column.id;
 
+  // Sync external value updates when not editing
   useEffect(() => {
-    setCurrentValue(value);
-  }, [value]);
+    if (!isEditing) setDraftValue(value);
+  }, [value, isEditing]);
 
-  // Callbacks for the input component
-  const handleChange = useCallback((newValue: any) => {
-    setCurrentValue(newValue);
+  const handleChange = useCallback((next: any) => setDraftValue(next), []);
+
+  const restoreFocus = useCallback(() => {
+    // Defer until DOM updates so the read-mode container exists
+    Promise.resolve().then(() => cellRef.current?.focus());
   }, []);
 
   const handleSave = useCallback(async () => {
     if (isSaving) return;
 
-    // Validate the value
     if (editConfig.validate) {
-      const validationError = editConfig.validate(currentValue, row);
+      const validationError = editConfig.validate(draftValue, row);
       if (validationError) {
         setError(validationError);
         return;
@@ -166,85 +168,86 @@ export function EditableCell<TData>({
     setError(null);
 
     try {
-      // Call edit start callback
-      editConfig.onEditStart?.(row, column);
+      const oldValue = value;
 
-      // Try column-specific onSave first, then global onCellEdit
-      const saveHandler = editConfig.onSave || onCellEdit;
-
-      if (saveHandler) {
-        const success = await saveHandler(currentValue, row, column);
-        if (!success) {
+      // Column-specific save runs first if provided; otherwise the grid-level handler.
+      const save = editConfig.onSave
+        ? () => editConfig.onSave!(draftValue, row, column)
+        : onCellEdit
+        ? () => onCellEdit(draftValue, row, column, oldValue)
+        : null;
+      if (save) {
+        const ok = await save();
+        if (!ok) {
           setError('Failed to save changes');
           setIsSaving(false);
           return;
         }
       }
 
-      // Update the row data optimistically
-      const originalData = row.original as any;
-      const accessorKey = (column as any).accessorKey;
-      if (accessorKey) {
-        originalData[accessorKey] = currentValue;
-      }
+      // Notify consumer of the value change so they can update state immutably.
+      // We deliberately do NOT mutate row.original here.
+      onCellValueChange?.(row.id, column.id, oldValue, draftValue);
 
-      // Exit edit mode
       setEditingCell(null);
-
-      // Call edit end callback
       editConfig.onEditEnd?.(row, column);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to save changes';
-      setError(errorMessage);
-      onCellEditError?.(errorMessage, row, column);
+      restoreFocus();
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Failed to save changes';
+      setError(msg);
+      onCellEditError?.(msg, row, column);
     } finally {
       setIsSaving(false);
     }
-  }, [currentValue, editConfig, row, column, onCellEdit, onCellEditError, isSaving, mode, setEditingCell]);
+  }, [
+    isSaving,
+    editConfig,
+    draftValue,
+    row,
+    column,
+    value,
+    onCellEdit,
+    onCellValueChange,
+    onCellEditError,
+    setEditingCell,
+    restoreFocus,
+  ]);
 
   const handleCancel = useCallback(() => {
-    setCurrentValue(value); // Reset to original value
+    setDraftValue(value);
     setError(null);
     editConfig.onCancel?.(row, column);
-
-    // Exit edit mode
     setEditingCell(null);
-  }, [value, editConfig, row, column, mode, setEditingCell]);
+    restoreFocus();
+  }, [value, editConfig, row, column, setEditingCell, restoreFocus]);
 
   const handleExit = useCallback(() => {
-    // Exit without saving or canceling
     setEditingCell(null);
     setError(null);
-  }, [setEditingCell]);
+    restoreFocus();
+  }, [setEditingCell, restoreFocus]);
 
   const startEditing = useCallback(() => {
     if (editConfig.disabled?.(row)) return;
-
     setEditingCell({ rowId: row.id, columnId: column.id });
     setError(null);
     editConfig.onEditStart?.(row, column);
   }, [editConfig, row, column, setEditingCell]);
 
   const handleClick = useCallback(() => {
-    if (mode === 'click' && !isEditing) {
-      startEditing();
-    }
+    if (mode === 'click' && !isEditing) startEditing();
   }, [mode, isEditing, startEditing]);
 
   const handleDoubleClick = useCallback(() => {
-    if (mode === 'doubleClick' && !isEditing) {
-      startEditing();
-    }
+    if (mode === 'doubleClick' && !isEditing) startEditing();
   }, [mode, isEditing, startEditing]);
 
-  // Render edit component
   if (isEditing) {
     const EditComponent = editConfig.component || DefaultTextInput;
-
     return (
       <div className='relative w-full h-full min-h-[32px]'>
         <EditComponent
-          value={currentValue}
+          value={draftValue}
           onChange={handleChange}
           onSave={handleSave}
           onCancel={handleCancel}
@@ -263,24 +266,23 @@ export function EditableCell<TData>({
     );
   }
 
-  // Render display value
+  // Display mode — use pre-rendered content from the body if provided, otherwise stringified value
+  const content = displayContent !== undefined ? displayContent : String(value ?? '');
+  const isDisabled = editConfig.disabled?.(row);
+
   return (
     <div
+      ref={cellRef}
+      tabIndex={-1}
+      data-editable-cell={isDisabled ? 'disabled' : 'true'}
       className={cn(
-        "w-full h-full flex items-center",
-        mode === 'click' && "cursor-pointer hover:bg-muted/50",
-        mode === 'doubleClick' && "cursor-pointer hover:bg-muted/50",
-        editConfig.disabled?.(row) && "opacity-50 cursor-not-allowed"
+        'w-full h-full flex items-center outline-none',
+        !isDisabled && 'cursor-pointer',
+        isDisabled && 'opacity-50 cursor-not-allowed'
       )}
       onClick={handleClick}
-      onDoubleClick={handleDoubleClick}
-      title={
-        mode === 'click' ? 'Click to edit' :
-        mode === 'doubleClick' ? 'Double-click to edit' :
-        undefined
-      }
-    >
-      {String(currentValue || '')}
+      onDoubleClick={handleDoubleClick}>
+      {content}
     </div>
   );
 }
