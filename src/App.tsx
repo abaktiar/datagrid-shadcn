@@ -18,11 +18,7 @@ import {
   Paintbrush,
   Accessibility,
   Pencil,
-  Sparkles,
-  Terminal,
-  ChevronRight,
   Table2,
-  Zap,
 } from 'lucide-react';
 import {
   DataGrid,
@@ -66,49 +62,42 @@ const statusOptions = [
 // Create status select component
 const StatusSelectInput = createSelectEditComponent<UserType>(statusOptions);
 
-// Feature card data
+// Feature spec-sheet data
 const features = [
   {
     icon: Search,
-    title: 'Advanced Filtering',
-    description: 'Global search and column-specific filtering with real-time results',
-    gradient: 'from-amber-500 to-orange-600',
+    title: 'Advanced filtering',
+    description: 'Global search and column-specific filtering with real-time results.',
   },
   {
     icon: ArrowUpDown,
-    title: 'Smart Sorting',
-    description: 'Single and multi-column sorting with visual indicators',
-    gradient: 'from-orange-500 to-red-500',
+    title: 'Smart sorting',
+    description: 'Single and multi-column sorting with visual indicators.',
   },
   {
     icon: CheckSquare,
-    title: 'Row Selection',
-    description: 'Multi-row selection with contextual bulk actions',
-    gradient: 'from-yellow-500 to-amber-600',
+    title: 'Row selection',
+    description: 'Multi-row selection with contextual bulk actions.',
   },
   {
     icon: FileText,
     title: 'Pagination',
-    description: 'Client-side and server-side pagination support',
-    gradient: 'from-orange-400 to-amber-500',
+    description: 'Client-side and server-side pagination support.',
   },
   {
     icon: Paintbrush,
     title: 'Customizable',
-    description: 'Fully composable with shadcn/ui design system',
-    gradient: 'from-red-500 to-orange-600',
+    description: 'Fully composable with the shadcn/ui design system.',
   },
   {
     icon: Accessibility,
     title: 'Accessible',
-    description: 'WCAG compliant with full keyboard navigation',
-    gradient: 'from-amber-600 to-yellow-500',
+    description: 'WCAG 2.1 AA with full keyboard navigation.',
   },
   {
     icon: Pencil,
-    title: 'Inline Editing',
-    description: 'Click to edit cells with validation and custom inputs',
-    gradient: 'from-orange-600 to-red-600',
+    title: 'Inline editing',
+    description: 'Click to edit cells with validation and custom input components.',
   },
 ];
 
@@ -563,22 +552,17 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-      {/* Background decorations */}
-      <div className="fixed inset-0 geometric-grid opacity-30 dark:opacity-20 pointer-events-none" />
-      <div className="fixed top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-primary/10 via-transparent to-transparent rounded-full blur-3xl pointer-events-none" />
-      <div className="fixed bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-chart-5/10 via-transparent to-transparent rounded-full blur-3xl pointer-events-none" />
+      {/* Subtle grid texture — engineering paper */}
+      <div className="fixed inset-0 geometric-grid opacity-20 dark:opacity-15 pointer-events-none" />
 
       {/* Navigation bar */}
-      <nav className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-lg">
+      <nav className="sticky top-0 z-50 border-b bg-background">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary to-chart-5 flex items-center justify-center shadow-lg">
-              <Table2 className="w-5 h-5 text-white" />
+            <div className="w-9 h-9 rounded-md bg-primary flex items-center justify-center">
+              <Table2 className="w-5 h-5 text-primary-foreground" />
             </div>
-            <span className="font-bold text-lg tracking-tight">DataGrid</span>
-            <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
-              shadcn/ui
-            </span>
+            <span className="font-semibold text-lg tracking-tight">DataGrid</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -603,218 +587,183 @@ function App() {
       </nav>
 
       <main className="relative z-10">
-        {/* Hero Section */}
-        <section className="pt-16 pb-20 px-6">
-          <div className="max-w-5xl mx-auto text-center">
-            {/* Visitor badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted/50 border text-xs text-muted-foreground mb-8 animate-fade-in-up opacity-0">
-              <Sparkles className="w-3.5 h-3.5 text-primary" />
-              <span>Production-ready data tables for React</span>
-              <img
-                src="https://visitor-badge.laobi.icu/badge?page_id=abaktiar.datagrid-shadcn"
-                alt="Visitor count"
-                className="h-4"
-              />
-            </div>
-
-            {/* Main title */}
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6 animate-fade-in-up opacity-0 delay-100">
-              <span className="gradient-text">DataGrid</span>
-              <br />
-              <span className="text-foreground">for shadcn/ui</span>
-            </h1>
-
-            {/* Subtitle */}
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8 animate-fade-in-up opacity-0 delay-200">
-              A feature-rich, composable datagrid built with TanStack Table v8 and Tailwind CSS v4. Sorting, filtering,
-              pagination, row selection, and inline cell editing — all in one package.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 animate-fade-in-up opacity-0 delay-300">
-              <a
-                href="#demo"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-chart-5 text-white font-medium shadow-lg hover:shadow-xl transition-all hover:scale-105">
-                <Zap className="w-4 h-4" />
-                Try the Demo
-                <ChevronRight className="w-4 h-4" />
-              </a>
-              <a
-                href="#install"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-card border font-medium hover:bg-muted transition-colors">
-                <Terminal className="w-4 h-4" />
-                Quick Install
-              </a>
-            </div>
-
-            {/* Tech badges */}
-            <div className="flex flex-wrap items-center justify-center gap-3 animate-fade-in-up opacity-0 delay-400">
-              {['TanStack Table v8', 'React 19', 'Tailwind CSS v4', 'TypeScript'].map((tech) => (
-                <span
-                  key={tech}
-                  className="px-3 py-1.5 rounded-lg bg-card border text-sm font-medium text-muted-foreground">
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Demo Section */}
-        <section id="demo" className="py-16 px-6">
+        {/* Hero — title, install command, and the live DataGrid in one tight unit */}
+        <section className="pt-10 pb-20 px-6">
           <div className="max-w-7xl mx-auto">
-            {/* Section header */}
-            <div className="text-center mb-10 animate-fade-in-up opacity-0">
-              <h2 className="text-3xl font-bold mb-3">Interactive Demo</h2>
-              <p className="text-muted-foreground max-w-xl mx-auto">
-                Experience all features in action. Try sorting, filtering, selecting rows, and editing cells directly.
+            {/* Title block */}
+            <div className="text-center max-w-3xl mx-auto mb-10">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted/60 border text-xs text-muted-foreground mb-6 animate-fade-in-up opacity-0">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                <span>Production-ready data tables for React</span>
+              </div>
+
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-tight mb-6 animate-fade-in-up opacity-0 delay-100">
+                <span className="text-primary">DataGrid</span>
+                <br />
+                <span className="text-foreground">for shadcn/ui</span>
+              </h1>
+
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8 animate-fade-in-up opacity-0 delay-200">
+                Composable, fully typed, built on TanStack Table v8. Sort, filter, paginate, select, and edit inline.
               </p>
-            </div>
 
-            {/* Mode Toggle */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6 animate-fade-in-up opacity-0 delay-100">
-              <div className="inline-flex items-center p-1 rounded-xl bg-muted/50 border">
-                <button
-                  onClick={() => setIsServerSide(false)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    !isServerSide
-                      ? 'bg-background shadow-sm text-foreground'
-                      : 'text-muted-foreground hover:text-foreground'
-                  }`}>
-                  <Monitor className="h-4 w-4" />
-                  Client-Side
-                </button>
-                <button
-                  onClick={() => setIsServerSide(true)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    isServerSide
-                      ? 'bg-background shadow-sm text-foreground'
-                      : 'text-muted-foreground hover:text-foreground'
-                  }`}>
-                  <Server className="h-4 w-4" />
-                  Server-Side
-                </button>
-              </div>
-              <span className="text-sm text-muted-foreground">
-                {isServerSide ? 'Simulated API calls with loading states' : 'All operations in the browser'}
-              </span>
-            </div>
-
-            {/* Editing hint */}
-            <div className="flex items-center justify-center gap-2 mb-6 text-sm text-muted-foreground animate-fade-in-up opacity-0 delay-200">
-              <Pencil className="w-4 h-4" />
-              <span>
-                <strong>Click</strong> First Name · <strong>Blur</strong> Last Name · <strong>Double-click</strong> Role
-                & Status · <strong>Enter</strong> Notes
-              </span>
-            </div>
-
-            {/* DataGrid */}
-            <div className="rounded-2xl border bg-card/50 backdrop-blur-sm p-4 shadow-xl animate-fade-in-up opacity-0 delay-300">
-              <DataGrid
-                data={isServerSide ? serverData : clientData}
-                columns={columns}
-                actions={actions}
-                enableRowSelection={true}
-                enableMultiRowSelection={true}
-                enableSorting={true}
-                enableMultiSort={false}
-                enableGlobalFilter={true}
-                enableColumnFilters={true}
-                enablePagination={true}
-                pageSize={5}
-                pageSizeOptions={[5, 10, 15, 25]}
-                enableCellEditing={true}
-                defaultEditMode="click"
-                onCellEdit={handleCellEdit}
-                onCellEditError={handleCellEditError}
-                manualPagination={isServerSide}
-                manualSorting={isServerSide}
-                manualFiltering={isServerSide}
-                totalCount={isServerSide ? totalCount : undefined}
-                pageCount={isServerSide ? pageCount : undefined}
-                isLoading={isServerSide ? isLoading : false}
-                onDataChange={isServerSide ? handleDataChange : undefined}
-                cellContextMenuItems={cellContextMenuItems}
-                headerContextMenuItems={headerContextMenuItems}
-                enableCellContextMenu={true}
-                enableHeaderContextMenu={true}
-                aria-label="User management table"
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* Installation Section */}
-        <section id="install" className="py-20 px-6">
-          <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-10 animate-fade-in-up opacity-0">
-              <h2 className="text-3xl font-bold mb-3">Quick Installation</h2>
-              <p className="text-muted-foreground">Add the DataGrid component to your project with a single command</p>
-            </div>
-
-            <div className="space-y-4 animate-fade-in-up opacity-0 delay-100">
-              {/* Package manager tabs */}
-              <div className="flex items-center">
-                <div className="inline-flex items-center p-1 rounded-xl bg-muted/50 border">
-                  {Object.keys(packageCommands).map((pm) => (
-                    <button
-                      key={pm}
-                      onClick={() => setSelectedPackageManager(pm)}
-                      className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
-                        selectedPackageManager === pm
-                          ? 'bg-background shadow-sm text-foreground'
-                          : 'text-muted-foreground hover:text-foreground'
-                      }`}>
-                      {pm}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Terminal window */}
-              <div className="relative">
-                <div className="terminal-window rounded-xl overflow-hidden">
-                  {/* Terminal header */}
-                  <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10">
-                    <div className="w-3 h-3 rounded-full bg-[#ff5f57]"></div>
-                    <div className="w-3 h-3 rounded-full bg-[#febc2e]"></div>
-                    <div className="w-3 h-3 rounded-full bg-[#28c840]"></div>
-                    <span className="ml-2 text-xs text-white/40 font-mono">terminal</span>
-                  </div>
-
-                  {/* Terminal content */}
-                  <div className="p-5 flex items-center gap-3">
-                    <code className="flex-1 font-mono text-sm text-emerald-400 overflow-x-auto">
-                      <span className="text-white/40">$ </span>
-                      {packageCommands[selectedPackageManager as keyof typeof packageCommands]}
-                    </code>
-                    <button
-                      onClick={copyToClipboard}
-                      className="flex-shrink-0 p-2 rounded-lg hover:bg-white/10 transition-colors text-white/60 hover:text-white">
-                      {copiedCommand === selectedPackageManager ? (
-                        <Check className="h-4 w-4 text-emerald-400" />
-                      ) : (
-                        <Copy className="h-4 w-4" />
-                      )}
-                    </button>
+              {/* Install block — primary action */}
+              <div className="max-w-2xl mx-auto animate-fade-in-up opacity-0 delay-300">
+                <div className="flex items-center justify-center mb-3">
+                  <div className="inline-flex items-center p-1 rounded-lg bg-muted/50 border">
+                    {Object.keys(packageCommands).map((pm) => (
+                      <button
+                        key={pm}
+                        onClick={() => setSelectedPackageManager(pm)}
+                        className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
+                          selectedPackageManager === pm
+                            ? 'bg-background shadow-sm text-foreground'
+                            : 'text-muted-foreground hover:text-foreground'
+                        }`}>
+                        {pm}
+                      </button>
+                    ))}
                   </div>
                 </div>
 
-                {/* Copied toast */}
-                {copiedCommand === selectedPackageManager && (
-                  <div className="absolute -bottom-10 left-1/2 -translate-x-1/2">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-medium dark:bg-emerald-900/30 dark:text-emerald-400">
-                      <Check className="w-3 h-3" />
-                      Copied to clipboard
-                    </span>
+                <div className="relative">
+                  <div className="terminal-window rounded-lg overflow-hidden text-left">
+                    <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/10">
+                      <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]"></div>
+                      <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]"></div>
+                      <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]"></div>
+                      <span className="ml-2 text-xs text-white/40 font-mono">terminal</span>
+                    </div>
+                    <div className="p-4 flex items-center gap-3">
+                      <code className="flex-1 font-mono text-sm text-emerald-300 overflow-x-auto whitespace-nowrap">
+                        <span className="text-white/40">$ </span>
+                        {packageCommands[selectedPackageManager as keyof typeof packageCommands]}
+                      </code>
+                      <button
+                        onClick={copyToClipboard}
+                        aria-label="Copy install command"
+                        className="flex-shrink-0 p-2 rounded-md hover:bg-white/10 transition-colors text-white/60 hover:text-white">
+                        {copiedCommand === selectedPackageManager ? (
+                          <Check className="h-4 w-4 text-emerald-300" />
+                        ) : (
+                          <Copy className="h-4 w-4" />
+                        )}
+                      </button>
+                    </div>
                   </div>
-                )}
+
+                  {copiedCommand === selectedPackageManager && (
+                    <div className="absolute -bottom-9 left-1/2 -translate-x-1/2 pointer-events-none">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-foreground text-background text-xs font-medium">
+                        <Check className="w-3 h-3" />
+                        Copied
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mt-7 text-sm text-muted-foreground">
+                  <a
+                    href="https://github.com/abaktiar/datagrid-shadcn"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors">
+                    <Github className="w-4 h-4" />
+                    View source
+                  </a>
+                  <span className="opacity-40">·</span>
+                  <span>MIT</span>
+                  <span className="opacity-40">·</span>
+                  <span>TanStack Table v8</span>
+                  <span className="opacity-40">·</span>
+                  <span>React 19</span>
+                  <span className="opacity-40">·</span>
+                  <img
+                    src="https://visitor-badge.laobi.icu/badge?page_id=abaktiar.datagrid-shadcn"
+                    alt="Visitor count"
+                    className="h-4"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Live DataGrid — the proof, directly below the install command */}
+            <div id="demo" className="pt-4 animate-fade-in-up opacity-0 delay-500">
+              {/* Mode + editing controls — inline above the grid */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-x-6 gap-y-3 mb-5">
+                <div className="inline-flex items-center p-1 rounded-lg bg-muted/50 border">
+                  <button
+                    onClick={() => setIsServerSide(false)}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                      !isServerSide
+                        ? 'bg-background shadow-sm text-foreground'
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}>
+                    <Monitor className="h-3.5 w-3.5" />
+                    Client-side
+                  </button>
+                  <button
+                    onClick={() => setIsServerSide(true)}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                      isServerSide
+                        ? 'bg-background shadow-sm text-foreground'
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}>
+                    <Server className="h-3.5 w-3.5" />
+                    Server-side
+                  </button>
+                </div>
+                <span className="text-xs text-muted-foreground tracking-tight">
+                  {isServerSide ? 'Simulated API calls with loading states' : 'All operations in the browser'}
+                </span>
               </div>
 
-              <p className="text-center text-sm text-muted-foreground pt-4">
-                Installs the DataGrid component and all dependencies into your project
-              </p>
+              {/* Editing hint */}
+              <div className="flex items-center justify-center gap-2 mb-4 text-xs text-muted-foreground">
+                <Pencil className="w-3.5 h-3.5" />
+                <span className="tracking-tight">
+                  <span className="text-foreground font-medium">Click</span> First Name
+                  <span className="mx-2 opacity-40">·</span>
+                  <span className="text-foreground font-medium">Blur</span> Last Name
+                  <span className="mx-2 opacity-40">·</span>
+                  <span className="text-foreground font-medium">Double-click</span> Role &amp; Status
+                  <span className="mx-2 opacity-40">·</span>
+                  <span className="text-foreground font-medium">Enter</span> Notes
+                </span>
+              </div>
+
+              <div className="rounded-lg border bg-card p-4 shadow-sm">
+                <DataGrid
+                  data={isServerSide ? serverData : clientData}
+                  columns={columns}
+                  actions={actions}
+                  enableRowSelection={true}
+                  enableMultiRowSelection={true}
+                  enableSorting={true}
+                  enableMultiSort={false}
+                  enableGlobalFilter={true}
+                  enableColumnFilters={true}
+                  enablePagination={true}
+                  pageSize={5}
+                  pageSizeOptions={[5, 10, 15, 25]}
+                  enableCellEditing={true}
+                  defaultEditMode="click"
+                  onCellEdit={handleCellEdit}
+                  onCellEditError={handleCellEditError}
+                  manualPagination={isServerSide}
+                  manualSorting={isServerSide}
+                  manualFiltering={isServerSide}
+                  totalCount={isServerSide ? totalCount : undefined}
+                  pageCount={isServerSide ? pageCount : undefined}
+                  isLoading={isServerSide ? isLoading : false}
+                  onDataChange={isServerSide ? handleDataChange : undefined}
+                  cellContextMenuItems={cellContextMenuItems}
+                  headerContextMenuItems={headerContextMenuItems}
+                  enableCellContextMenu={true}
+                  enableHeaderContextMenu={true}
+                  aria-label="User management table"
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -823,27 +772,23 @@ function App() {
         <section className="py-20 px-6 bg-muted/30">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-14 animate-fade-in-up opacity-0">
-              <h2 className="text-3xl font-bold mb-3">Everything You Need</h2>
+              <h2 className="text-3xl font-semibold tracking-tight mb-3">Everything you need</h2>
               <p className="text-muted-foreground max-w-xl mx-auto">
-                Built with modern React patterns and fully typed with TypeScript
+                Built to be installed, forked, and reshaped. Not configured.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-9 md:gap-y-10">
               {features.map((feature, index) => (
                 <div
                   key={feature.title}
-                  className="feature-card group relative bg-card rounded-2xl border p-6 animate-fade-in-up opacity-0"
-                  style={{ animationDelay: `${(index + 1) * 100}ms` }}>
-                  {/* Icon */}
-                  <div
-                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
-                    <feature.icon className="w-6 h-6 text-white" />
+                  className="flex items-start gap-4 animate-fade-in-up opacity-0"
+                  style={{ animationDelay: `${(index + 1) * 80}ms` }}>
+                  <feature.icon className="w-5 h-5 text-primary flex-shrink-0 mt-1" strokeWidth={1.75} />
+                  <div className="space-y-1.5">
+                    <h3 className="font-medium text-base text-foreground tracking-tight">{feature.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
                   </div>
-
-                  {/* Content */}
-                  <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
                 </div>
               ))}
             </div>
@@ -852,36 +797,18 @@ function App() {
 
         {/* Footer */}
         <footer className="py-10 px-6 border-t">
-          <div className="max-w-6xl mx-auto">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-chart-5 flex items-center justify-center">
-                  <Table2 className="w-4 h-4 text-white" />
-                </div>
-                <span className="font-semibold">DataGrid for shadcn/ui</span>
-              </div>
-
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span>Built by</span>
-                <a
-                  href="https://github.com/abaktiar"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-medium text-foreground hover:text-primary transition-colors">
-                  @abaktiar
-                </a>
-                <span>&</span>
-                <span className="font-medium text-foreground">AI</span>
-                <Sparkles className="w-4 h-4 text-primary" />
-              </div>
-
+          <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-sm text-muted-foreground">
+            <span>DataGrid for shadcn/ui</span>
+            <div className="flex items-center gap-2">
+              <span>Built with</span>
+              <span className="text-primary" aria-label="love">&#9829;</span>
+              <span>by</span>
               <a
-                href="https://github.com/abaktiar/datagrid-shadcn"
+                href="https://github.com/abaktiar"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-                <Github className="w-4 h-4" />
-                View on GitHub
+                className="font-medium text-foreground hover:text-primary transition-colors">
+                @abaktiar
               </a>
             </div>
           </div>

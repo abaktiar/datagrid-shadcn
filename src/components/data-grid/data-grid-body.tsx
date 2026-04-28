@@ -136,7 +136,7 @@ export function DataGridBody({ enableVirtualization = false, estimateSize = 35 }
                   <td
                     role='gridcell'
                     className={cn(
-                      'px-3 py-1.5 align-middle text-sm border-r border-border/50 [&:has([role=checkbox])]:pr-0',
+                      'px-3 py-1.5 align-middle text-sm tabular-nums border-r border-border/50 [&:has([role=checkbox])]:pr-0',
                       cell.column.id === 'select' && 'w-12 border-r-0'
                     )}
                     style={{
@@ -179,7 +179,7 @@ export function DataGridBody({ enableVirtualization = false, estimateSize = 35 }
               <td
                 role='gridcell'
                 className={cn(
-                  'px-3 py-1.5 align-middle text-sm border-r border-border/50 [&:has([role=checkbox])]:pr-0',
+                  'px-3 py-1.5 align-middle text-sm tabular-nums border-r border-border/50 [&:has([role=checkbox])]:pr-0',
                   cell.column.id === 'select' && 'w-12 border-r-0',
                   cell.column.getIsResizing() && 'w-2 border-r-primary'
                 )}

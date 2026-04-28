@@ -1,0 +1,364 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-28T00:00:00Z",
+  "title": "Design System: datagrid-shadcn",
+  "extensions": {
+    "colorMeta": {
+      "forge-copper": {
+        "role": "primary",
+        "displayName": "Forge Copper",
+        "canonical": "oklch(0.5553 0.1455 48.9975)",
+        "tonalRamp": [
+          "oklch(0.18 0.04 49)",
+          "oklch(0.28 0.07 49)",
+          "oklch(0.38 0.10 49)",
+          "oklch(0.48 0.13 49)",
+          "oklch(0.5553 0.1455 49)",
+          "oklch(0.66 0.17 48)",
+          "oklch(0.78 0.16 48)",
+          "oklch(0.88 0.10 50)"
+        ]
+      },
+      "forge-copper-bright": {
+        "role": "primary",
+        "displayName": "Forge Copper Bright",
+        "canonical": "oklch(0.7049 0.1867 47.6044)",
+        "tonalRamp": [
+          "oklch(0.22 0.05 48)",
+          "oklch(0.34 0.09 48)",
+          "oklch(0.46 0.13 48)",
+          "oklch(0.58 0.16 48)",
+          "oklch(0.7049 0.1867 48)",
+          "oklch(0.78 0.18 48)",
+          "oklch(0.86 0.14 48)",
+          "oklch(0.94 0.06 48)"
+        ]
+      },
+      "workshop-steel": {
+        "role": "secondary",
+        "displayName": "Workshop Steel",
+        "canonical": "oklch(0.6847 0.1479 237.3225)",
+        "tonalRamp": [
+          "oklch(0.20 0.04 237)",
+          "oklch(0.30 0.07 237)",
+          "oklch(0.42 0.10 237)",
+          "oklch(0.54 0.13 237)",
+          "oklch(0.6847 0.1479 237)",
+          "oklch(0.78 0.13 237)",
+          "oklch(0.86 0.09 237)",
+          "oklch(0.94 0.04 237)"
+        ]
+      },
+      "workshop-twilight": {
+        "role": "secondary",
+        "displayName": "Workshop Twilight",
+        "canonical": "oklch(0.3098 0.0397 229.3202)",
+        "tonalRamp": [
+          "oklch(0.14 0.02 229)",
+          "oklch(0.20 0.03 229)",
+          "oklch(0.26 0.035 229)",
+          "oklch(0.3098 0.0397 229)",
+          "oklch(0.40 0.045 229)",
+          "oklch(0.55 0.06 229)",
+          "oklch(0.72 0.05 229)",
+          "oklch(0.90 0.02 229)"
+        ]
+      },
+      "parchment-cream": {
+        "role": "neutral",
+        "displayName": "Parchment Cream",
+        "canonical": "oklch(0.9885 0.0057 84.5659)",
+        "tonalRamp": [
+          "oklch(0.22 0.015 85)",
+          "oklch(0.36 0.020 85)",
+          "oklch(0.50 0.020 85)",
+          "oklch(0.66 0.015 85)",
+          "oklch(0.80 0.010 85)",
+          "oklch(0.90 0.008 85)",
+          "oklch(0.9686 0.0091 85)",
+          "oklch(0.9885 0.0057 85)"
+        ]
+      },
+      "parchment-warm": {
+        "role": "neutral",
+        "displayName": "Parchment Warm",
+        "canonical": "oklch(0.9686 0.0091 78.2818)",
+        "tonalRamp": [
+          "oklch(0.20 0.018 78)",
+          "oklch(0.34 0.022 78)",
+          "oklch(0.48 0.020 78)",
+          "oklch(0.62 0.018 78)",
+          "oklch(0.78 0.014 78)",
+          "oklch(0.88 0.012 78)",
+          "oklch(0.9363 0.0218 83)",
+          "oklch(0.9686 0.0091 78)"
+        ]
+      },
+      "parchment-edge": {
+        "role": "neutral",
+        "displayName": "Parchment Edge",
+        "canonical": "oklch(0.8866 0.0404 89.6994)",
+        "tonalRamp": [
+          "oklch(0.24 0.025 89)",
+          "oklch(0.36 0.035 89)",
+          "oklch(0.48 0.040 89)",
+          "oklch(0.62 0.045 89)",
+          "oklch(0.74 0.045 89)",
+          "oklch(0.83 0.045 89)",
+          "oklch(0.8866 0.0404 89)",
+          "oklch(0.95 0.025 89)"
+        ]
+      },
+      "ink-warm": {
+        "role": "neutral",
+        "displayName": "Ink Warm",
+        "canonical": "oklch(0.3660 0.0251 49.6085)",
+        "tonalRamp": [
+          "oklch(0.14 0.015 49)",
+          "oklch(0.22 0.020 49)",
+          "oklch(0.30 0.024 49)",
+          "oklch(0.3660 0.0251 49)",
+          "oklch(0.46 0.022 49)",
+          "oklch(0.60 0.018 49)",
+          "oklch(0.78 0.012 49)",
+          "oklch(0.93 0.006 49)"
+        ]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Ink Muted",
+        "canonical": "oklch(0.5534 0.0116 58.0708)",
+        "tonalRamp": [
+          "oklch(0.18 0.008 58)",
+          "oklch(0.28 0.010 58)",
+          "oklch(0.38 0.011 58)",
+          "oklch(0.48 0.012 58)",
+          "oklch(0.5534 0.0116 58)",
+          "oklch(0.68 0.011 58)",
+          "oklch(0.82 0.008 58)",
+          "oklch(0.94 0.005 58)"
+        ]
+      },
+      "workshop-near-black": {
+        "role": "neutral",
+        "displayName": "Workshop Near-Black",
+        "canonical": "oklch(0.1661 0.0051 56.0434)",
+        "tonalRamp": [
+          "oklch(0.10 0.004 56)",
+          "oklch(0.1661 0.0051 56)",
+          "oklch(0.22 0.006 56)",
+          "oklch(0.32 0.008 56)",
+          "oklch(0.46 0.010 56)",
+          "oklch(0.62 0.010 56)",
+          "oklch(0.80 0.008 56)",
+          "oklch(0.94 0.005 56)"
+        ]
+      },
+      "workshop-graphite": {
+        "role": "neutral",
+        "displayName": "Workshop Graphite",
+        "canonical": "oklch(0.2085 0.0063 34.2976)",
+        "tonalRamp": [
+          "oklch(0.12 0.005 34)",
+          "oklch(0.2085 0.0063 34)",
+          "oklch(0.28 0.008 34)",
+          "oklch(0.38 0.010 34)",
+          "oklch(0.50 0.011 34)",
+          "oklch(0.66 0.010 34)",
+          "oklch(0.82 0.008 34)",
+          "oklch(0.94 0.005 34)"
+        ]
+      },
+      "workshop-bone": {
+        "role": "neutral",
+        "displayName": "Workshop Bone",
+        "canonical": "oklch(0.9699 0.0013 106.4238)",
+        "tonalRamp": [
+          "oklch(0.18 0.002 106)",
+          "oklch(0.30 0.002 106)",
+          "oklch(0.44 0.001 106)",
+          "oklch(0.60 0.001 106)",
+          "oklch(0.74 0.001 106)",
+          "oklch(0.86 0.001 106)",
+          "oklch(0.93 0.001 106)",
+          "oklch(0.9699 0.0013 106)"
+        ]
+      },
+      "workshop-edge": {
+        "role": "neutral",
+        "displayName": "Workshop Edge",
+        "canonical": "oklch(0.3241 0.0087 67.5582)",
+        "tonalRamp": [
+          "oklch(0.14 0.005 67)",
+          "oklch(0.22 0.007 67)",
+          "oklch(0.3241 0.0087 67)",
+          "oklch(0.42 0.010 67)",
+          "oklch(0.55 0.011 67)",
+          "oklch(0.70 0.010 67)",
+          "oklch(0.84 0.008 67)",
+          "oklch(0.94 0.004 67)"
+        ]
+      },
+      "ember-red": {
+        "role": "destructive",
+        "displayName": "Ember Red",
+        "canonical": "oklch(0.5771 0.2152 27.3250)",
+        "tonalRamp": [
+          "oklch(0.18 0.06 27)",
+          "oklch(0.28 0.10 27)",
+          "oklch(0.38 0.14 27)",
+          "oklch(0.48 0.18 27)",
+          "oklch(0.5771 0.2152 27)",
+          "oklch(0.68 0.20 27)",
+          "oklch(0.82 0.13 27)",
+          "oklch(0.94 0.04 27)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero headline only. One use per page." },
+      "headline": { "displayName": "Headline", "purpose": "Section openers." },
+      "title": { "displayName": "Title", "purpose": "Card and component headings." },
+      "body": { "displayName": "Body", "purpose": "Prose. Cap line length at 65–75ch." },
+      "label": { "displayName": "Label", "purpose": "Buttons, form labels, table headers, micro-copy." },
+      "mono": { "displayName": "Mono", "purpose": "Code, prop tables, keyboard shortcuts, install commands." }
+    },
+    "shadows": [
+      { "name": "shadow-xs", "value": "0 2px 3px hsl(28 18% 25% / 0.09)", "purpose": "Resting elevation on outline buttons and inputs. Barely-there." },
+      { "name": "shadow-sm", "value": "0 2px 3px hsl(28 18% 25% / 0.18), 0 1px 2px -1px hsl(28 18% 25% / 0.18)", "purpose": "Default lifted elements: dropdowns, tooltips." },
+      { "name": "shadow-md", "value": "0 2px 3px hsl(28 18% 25% / 0.18), 0 2px 4px -1px hsl(28 18% 25% / 0.18)", "purpose": "Popovers, the action dock when active." },
+      { "name": "shadow-lg", "value": "0 2px 3px hsl(28 18% 25% / 0.18), 0 4px 6px -1px hsl(28 18% 25% / 0.18)", "purpose": "Modals (use sparingly)." },
+      { "name": "shadow-card-hover", "value": "0 20px 40px -12px hsl(28 18% 25% / 0.22)", "purpose": "Feature card on hover. Warm-tinted, never pure black." },
+      { "name": "shadow-dark-md", "value": "0 2px 3px hsl(0 0% 0% / 0.35), 0 2px 4px -1px hsl(0 0% 0% / 0.35)", "purpose": "Dark-mode equivalent of shadow-md. Pure black is acceptable in dark mode." }
+    ],
+    "motion": [
+      { "name": "ease-out-quart", "value": "cubic-bezier(0.25, 1, 0.5, 1)", "purpose": "Default easing for state transitions and hovers. Exponential ease-out, no bounce." },
+      { "name": "ease-out-expo", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Stronger ease-out for entering elements (action dock slide-in, popover entrance)." },
+      { "name": "duration-fast", "value": "100ms", "purpose": "Hover state changes within the DataGrid (row hover wash)." },
+      { "name": "duration-normal", "value": "150ms", "purpose": "Button hover / press transitions, focus ring fade-in." },
+      { "name": "duration-slow", "value": "300ms", "purpose": "Card hover lift, larger spatial transitions." },
+      { "name": "duration-entrance", "value": "200ms", "purpose": "Action dock slide-in, popover entrance." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" },
+      { "name": "2xl", "value": "1536px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary CTA on the marketing surface. Forge Copper background, parchment-cream text, label typography.",
+      "html": "<button class=\"ds-btn-primary\">Install with shadcn</button>",
+      "css": ".ds-btn-primary { background: oklch(0.5553 0.1455 48.9975); color: oklch(0.9885 0.0057 84.5659); font-family: 'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif; font-size: 0.8125rem; font-weight: 500; line-height: 1.3; letter-spacing: 0.01em; padding: 10px 20px; height: 40px; border: none; border-radius: 8px; box-shadow: 0 2px 3px hsl(28 18% 25% / 0.09); cursor: pointer; transition: background-color 150ms cubic-bezier(0.25, 1, 0.5, 1), box-shadow 150ms cubic-bezier(0.25, 1, 0.5, 1); } .ds-btn-primary:hover { background: oklch(0.4400 0.1300 48.9975); box-shadow: 0 2px 3px hsl(28 18% 25% / 0.18), 0 1px 2px -1px hsl(28 18% 25% / 0.18); } .ds-btn-primary:focus-visible { outline: 3px solid oklch(0.5553 0.1455 48.9975 / 0.5); outline-offset: 2px; } .ds-btn-primary:active { background: oklch(0.4400 0.1300 48.9975); transition: none; }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary CTA. Transparent fill, ink-warm text, parchment-edge hairline border.",
+      "html": "<button class=\"ds-btn-outline\">View on GitHub</button>",
+      "css": ".ds-btn-outline { background: transparent; color: oklch(0.3660 0.0251 49.6085); font-family: 'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif; font-size: 0.8125rem; font-weight: 500; line-height: 1.3; letter-spacing: 0.01em; padding: 10px 20px; height: 40px; border: 1px solid oklch(0.8866 0.0404 89.6994); border-radius: 8px; cursor: pointer; transition: background-color 150ms cubic-bezier(0.25, 1, 0.5, 1); } .ds-btn-outline:hover { background: oklch(0.9686 0.0091 78.2818); } .ds-btn-outline:focus-visible { outline: 3px solid oklch(0.5553 0.1455 48.9975 / 0.5); outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Tertiary action. No background, ink-muted text. Used inside the DataGrid toolbar.",
+      "html": "<button class=\"ds-btn-ghost\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg>Filter</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; gap: 6px; background: transparent; color: oklch(0.5534 0.0116 58.0708); font-family: 'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif; font-size: 0.8125rem; font-weight: 500; line-height: 1.3; padding: 8px 12px; height: 36px; border: none; border-radius: 8px; cursor: pointer; transition: background-color 100ms cubic-bezier(0.25, 1, 0.5, 1), color 100ms cubic-bezier(0.25, 1, 0.5, 1); } .ds-btn-ghost:hover { background: oklch(0.9686 0.0091 78.2818); color: oklch(0.3660 0.0251 49.6085); } .ds-btn-ghost:focus-visible { outline: 3px solid oklch(0.5553 0.1455 48.9975 / 0.5); outline-offset: 2px; } .ds-btn-ghost svg { width: 16px; height: 16px; flex-shrink: 0; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input-text",
+      "description": "Standard text field. 36px height, hairline border, copper focus ring.",
+      "html": "<input class=\"ds-input-text\" type=\"text\" placeholder=\"Search rows\" />",
+      "css": ".ds-input-text { background: oklch(0.9885 0.0057 84.5659); color: oklch(0.3660 0.0251 49.6085); font-family: 'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif; font-size: 1rem; font-weight: 400; line-height: 1.6; padding: 8px 12px; height: 36px; border: 1px solid oklch(0.8866 0.0404 89.6994); border-radius: 6px; outline: none; transition: border-color 150ms cubic-bezier(0.25, 1, 0.5, 1), box-shadow 150ms cubic-bezier(0.25, 1, 0.5, 1); } .ds-input-text::placeholder { color: oklch(0.5534 0.0116 58.0708); } .ds-input-text:focus-visible { border-color: oklch(0.5553 0.1455 48.9975); box-shadow: 0 0 0 3px oklch(0.5553 0.1455 48.9975 / 0.5); }"
+    },
+    {
+      "name": "Feature Card",
+      "kind": "card",
+      "refersTo": "card-feature",
+      "description": "Marketing-surface feature card. Hairline border, parchment-warm fill, lift-on-hover with warm shadow.",
+      "html": "<article class=\"ds-card-feature\"><h3 class=\"ds-card-feature__title\">Inline Editing</h3><p class=\"ds-card-feature__body\">Click any cell to edit, with validation and per-column input types.</p></article>",
+      "css": ".ds-card-feature { background: oklch(0.9686 0.0091 78.2818); color: oklch(0.3660 0.0251 49.6085); border: 1px solid oklch(0.8866 0.0404 89.6994); border-radius: 10px; padding: 24px 20px 20px; transition: transform 300ms cubic-bezier(0.25, 1, 0.5, 1), box-shadow 300ms cubic-bezier(0.25, 1, 0.5, 1); } .ds-card-feature:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -12px hsl(28 18% 25% / 0.22); } .ds-card-feature__title { font-family: 'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif; font-size: 1.125rem; font-weight: 500; line-height: 1.4; letter-spacing: -0.01em; margin: 0 0 8px; color: oklch(0.3660 0.0251 49.6085); } .ds-card-feature__body { font-family: 'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif; font-size: 1rem; font-weight: 400; line-height: 1.6; margin: 0; color: oklch(0.5534 0.0116 58.0708); }"
+    },
+    {
+      "name": "Install Command",
+      "kind": "custom",
+      "refersTo": "install-command",
+      "description": "Above-the-fold copyable install command. Dark slab in both themes, mono type, copy button top-right.",
+      "html": "<div class=\"ds-install\"><code class=\"ds-install__code\">npx shadcn@latest add datagrid-shadcn</code><button class=\"ds-install__copy\" aria-label=\"Copy install command\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"14\" height=\"14\" x=\"8\" y=\"8\" rx=\"2\" ry=\"2\"/><path d=\"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2\"/></svg></button></div>",
+      "css": ".ds-install { display: inline-flex; align-items: center; justify-content: space-between; gap: 16px; background: oklch(0.1661 0.0051 56.0434); border: 1px solid oklch(0.3241 0.0087 67.5582); border-radius: 10px; padding: 16px 20px; min-width: 380px; } .ds-install__code { font-family: 'Geist Mono', 'JetBrains Mono', 'Fira Code', ui-monospace, monospace; font-size: 0.875rem; font-weight: 400; line-height: 1.5; color: oklch(0.9699 0.0013 106.4238); user-select: all; } .ds-install__copy { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: transparent; color: oklch(0.6161 0.0091 56.2590); border: none; border-radius: 6px; cursor: pointer; transition: background-color 150ms cubic-bezier(0.25, 1, 0.5, 1), color 150ms cubic-bezier(0.25, 1, 0.5, 1); } .ds-install__copy:hover { background: oklch(0.2485 0.0063 34.2976); color: oklch(0.7049 0.1867 47.6044); } .ds-install__copy:focus-visible { outline: 3px solid oklch(0.7049 0.1867 47.6044 / 0.5); outline-offset: 2px; }"
+    },
+    {
+      "name": "DataGrid Header Cell",
+      "kind": "custom",
+      "refersTo": "datagrid-header-cell",
+      "description": "Sortable column header. Label typography, ink-muted color, parchment-edge bottom border, subtle steel-blue hover hint.",
+      "html": "<button class=\"ds-grid-header\" aria-sort=\"none\">Email<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m7 15 5 5 5-5\"/><path d=\"m7 9 5-5 5 5\"/></svg></button>",
+      "css": ".ds-grid-header { display: inline-flex; align-items: center; gap: 6px; background: transparent; color: oklch(0.5534 0.0116 58.0708); font-family: 'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif; font-size: 0.8125rem; font-weight: 500; line-height: 1.3; letter-spacing: 0.01em; padding: 12px 14px; height: 44px; width: 100%; border: none; border-bottom: 1px solid oklch(0.8866 0.0404 89.6994); cursor: pointer; text-align: left; transition: color 100ms cubic-bezier(0.25, 1, 0.5, 1), background-color 100ms cubic-bezier(0.25, 1, 0.5, 1); } .ds-grid-header:hover { color: oklch(0.6847 0.1479 237.3225); background: oklch(0.9686 0.0091 78.2818); } .ds-grid-header:focus-visible { outline: 2px solid oklch(0.5553 0.1455 48.9975 / 0.5); outline-offset: -2px; } .ds-grid-header svg { width: 12px; height: 12px; opacity: 0.5; flex-shrink: 0; }"
+    },
+    {
+      "name": "DataGrid Row (Selected)",
+      "kind": "custom",
+      "refersTo": "datagrid-row-selected",
+      "description": "Selected row inside the DataGrid. Workshop-steel left edge (the only permitted left-stripe in the system) plus a tinted background wash.",
+      "html": "<div class=\"ds-grid-row ds-grid-row--selected\"><span>jordan@example.com</span><span class=\"ds-grid-num\">1,284</span><span>Active</span></div>",
+      "css": ".ds-grid-row { display: grid; grid-template-columns: 2fr 1fr 1fr; align-items: center; gap: 16px; padding: 10px 14px; height: 40px; color: oklch(0.3660 0.0251 49.6085); font-family: 'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif; font-size: 1rem; font-weight: 400; line-height: 1.6; border-bottom: 1px solid oklch(0.8866 0.0404 89.6994); transition: background-color 100ms cubic-bezier(0.25, 1, 0.5, 1); } .ds-grid-row:hover { background: oklch(0.9686 0.0091 78.2818); } .ds-grid-row--selected { background: oklch(0.6847 0.1479 237.3225 / 0.12); border-left: 2px solid oklch(0.6847 0.1479 237.3225); padding-left: 12px; } .ds-grid-num { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; text-align: right; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Lit Workbench",
+    "overview": "A workshop after hours: a warm task lamp pooling amber light over a steel workbench, precision tools laid out, the rest of the room receding into deep dusk. The brand surface is the warm task light — parchment cream in day, near-black with a warm tilt at night, copper as the ambient accent. The data surface is the steel — calmer, cooler, with a workshop-blue that carries through tables, charts, and selection states. Two color climates, one workshop. The warmth invites the developer in; the cool precision is what they came to use. The voice is a senior engineer demoing to a peer — warm, direct, technically dense, never hyped.",
+    "keyCharacteristics": [
+      "Warm copper as the brand voice; cool steel-blue as the data voice. The two never fight on the same surface.",
+      "Dark mode is the default. Both themes are first-class — neither is an afterthought.",
+      "Geometric sans (Geist) for everything. No serif. No display font. Hierarchy through weight + size + tracking, not family.",
+      "Engineering-craft references: Linear, Raycast, Vercel for confidence; Resend, Cal.com for warmth.",
+      "Above-the-fold artifact is a real, fully interactive DataGrid — not a screenshot, not a hero metric."
+    ],
+    "rules": [
+      { "name": "The Workshop Voltage Rule", "body": "Workshop Steel and Workshop Twilight are forbidden on the marketing surface (hero, feature cards, nav, footer, CTAs). They live exclusively inside the DataGrid and adjacent data UI. The page is warm; the tool is cool.", "section": "colors" },
+      { "name": "The One Glow Rule", "body": "Forge Copper appears on no more than ~10% of any given marketing screen. Its rarity is the point.", "section": "colors" },
+      { "name": "The Tinted-Neutral Rule", "body": "Every neutral carries a warm hue tilt (chroma 0.005–0.025). Pure-gray neutrals are forbidden.", "section": "colors" },
+      { "name": "The No-Caps Rule", "body": "Section headers, button labels, and tabs are sentence-case. UPPERCASE LABELS are forbidden — they are the most reliable signal of generic SaaS templates.", "section": "typography" },
+      { "name": "The Tabular Numerals Rule", "body": "Inside the DataGrid, every numeric cell must enable tabular-numerals (font-feature-settings: 'tnum' 1). Numbers must align column-down, every digit.", "section": "typography" },
+      { "name": "The One Family Rule", "body": "No serif. No second sans. No script. The whole system is one geometric sans family. Variety comes from weight (400, 500, 600) and size, not from typeface contrast.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Cards, sections, and tables sit flat on the surface. Shadows appear only as a response to state or to indicate genuine floating (popover, tooltip, dropdown).", "section": "elevation" },
+      { "name": "The Warm-Shadow Rule", "body": "Light-mode shadows carry the brand warm hue (hsl(28 18% 25%) at 9–18% opacity). Pure-black shadows on warm parchment read as dirty smudges, not depth.", "section": "elevation" },
+      { "name": "Modal As Last Resort", "body": "Modals are usually laziness. Exhaust inline editing, popovers, and progressive-disclosure alternatives first.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep the marketing surface warm (parchment + copper) and the DataGrid surface cool-tinted (steel for selection/data accents, twilight for dark-mode panels).",
+      "Do use Geist Sans + Geist Mono only. One family for type, period.",
+      "Do tilt every neutral toward the brand warm hue. Chroma 0.005–0.025, never 0.",
+      "Do put a real, fully interactive DataGrid above the fold on the showcase. The component IS the pitch.",
+      "Do enable tabular numerals (font-feature-settings: 'tnum' 1) in every numeric DataGrid cell.",
+      "Do honor prefers-reduced-motion: decorative animations shorten or disable; functional state transitions remain.",
+      "Do ship both dark and light themes. Dark is the default; light must be equally polished, not an afterthought."
+    ],
+    "donts": [
+      "Don't put Workshop Steel or Workshop Twilight on the marketing surface. That collapses the dual-register story into generic enterprise admin.",
+      "Don't use gradient text. Delete the .gradient-text utility from index.css.",
+      "Don't use glassmorphism. Delete the .glass-panel utility.",
+      "Don't ship UPPERCASE LABELS or tracking-wide small-cap section headers.",
+      "Don't ship pure black (#000) or pure white (#fff) anywhere.",
+      "Don't ship pure-gray borders, surfaces, or text.",
+      "Don't ship a 3-column 6-card identical-icon feature grid.",
+      "Don't ship hero-metric template (10M+ rows, <1ms render). Show metrics by demonstrating, not announcing.",
+      "Don't ship gradient buttons, glowing buttons, or animated borders.",
+      "Don't ship a 'Trusted by' logo strip.",
+      "Don't ship side-stripe colored borders >1px on cards or callouts. The single permitted left-stripe is the 2px Workshop Steel selected-row indicator inside the DataGrid.",
+      "Don't ship border-radius greater than 14px on any element except a circular avatar.",
+      "Don't ship modals as a first thought.",
+      "Don't introduce a serif. Merriweather has been removed on purpose; do not re-add it.",
+      "Don't introduce a display font. Geist Sans at 600 weight handles all display needs."
+    ]
+  }
+}
