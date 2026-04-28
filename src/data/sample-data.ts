@@ -12,7 +12,7 @@ export interface User {
   notes?: string;
 }
 
-export const sampleUsers: User[] = [
+const seedUsers: User[] = [
   {
     id: '1',
     firstName: 'John',
@@ -172,3 +172,84 @@ export const sampleUsers: User[] = [
     createdAt: '2023-10-25T09:30:00Z',
   },
 ];
+
+const FIRST_NAMES = [
+  'Aaron', 'Beatrice', 'Caleb', 'Daphne', 'Elena', 'Felix', 'Gabriella', 'Henry',
+  'Isabel', 'Jasper', 'Kira', 'Liam', 'Maya', 'Nathan', 'Olivia', 'Preston',
+  'Quinn', 'Rosa', 'Samuel', 'Tara', 'Ulysses', 'Vera', 'Wesley', 'Xena',
+  'Yusuf', 'Zara', 'Adrian', 'Bianca', 'Cyrus', 'Delia', 'Ezra', 'Freya',
+  'Grant', 'Hazel', 'Imani', 'Jonas', 'Kendra', 'Lukas', 'Mira', 'Nico',
+];
+
+const LAST_NAMES = [
+  'Adams', 'Bennett', 'Carter', 'Diaz', 'Evans', 'Foster', 'Garcia', 'Hughes',
+  'Iverson', 'Jenkins', 'Khan', 'Lopez', 'Martinez', 'Nguyen', 'Owens', 'Patel',
+  'Quincy', 'Rivera', 'Sanchez', 'Tanaka', 'Underwood', 'Vasquez', 'Walker', 'Xu',
+  'Young', 'Zhang', 'Bailey', 'Cooper', 'Dixon', 'Ellis', 'Fischer', 'Graham',
+];
+
+const DOMAINS = ['example.com', 'corp.io', 'mail.dev', 'workspace.co', 'company.net'];
+const ROLES = ['Admin', 'Editor', 'Viewer'];
+const STATUSES: Array<User['status']> = ['active', 'active', 'active', 'inactive', 'pending'];
+const PRIORITIES: Array<NonNullable<User['priority']>> = ['High', 'Medium', 'Medium', 'Low'];
+const DEPARTMENTS = [
+  'Engineering', 'Marketing', 'Sales', 'Design', 'Product',
+  'Operations', 'Finance', 'HR', 'Legal', 'Support', 'Research',
+];
+const NOTE_TEMPLATES: Array<string | null> = [
+  'Working on Q1 deliverables',
+  'On parental leave next quarter',
+  'Mentoring two junior team members',
+  'Lead reviewer for migration project',
+  'Requested workstation upgrade',
+  'Cross-team liaison for analytics',
+  'Recently promoted to senior role',
+  null, null, null, null,
+];
+
+// Deterministic integer hash — produces stable pseudo-random picks across reloads
+// so the demo dataset is identical for every visitor (avoids hydration jitter).
+function pick<T>(arr: T[], index: number, salt: number): T {
+  const h = Math.imul(index ^ salt, 2654435761) >>> 0;
+  return arr[h % arr.length];
+}
+
+const REF_TIME = Date.UTC(2024, 0, 17, 12, 0, 0);
+const DAY_MS = 86_400_000;
+
+function generateUser(index: number): User {
+  const id = String(index + 1);
+  const firstName = pick(FIRST_NAMES, index, 0x9e37);
+  const lastName = pick(LAST_NAMES, index, 0x7f4a);
+  const domain = pick(DOMAINS, index, 0x51ed);
+  const role = pick(ROLES, index, 0x27d4);
+  const status = pick(STATUSES, index, 0x1b87);
+  const priority = pick(PRIORITIES, index, 0x6c8e);
+  const department = pick(DEPARTMENTS, index, 0x3a4d);
+  const notes = pick(NOTE_TEMPLATES, index, 0x4f12);
+
+  const lastLoginDays = pick([0, 1, 2, 3, 4, 5, 7, 10, 14, 21, 30, 45, 60], index, 0x2c91);
+  const createdAtDays = 90 + (Math.imul(index, 1103515245) >>> 16) % 540;
+
+  return {
+    id,
+    firstName,
+    lastName,
+    email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}${index}@${domain}`,
+    role,
+    status,
+    lastLogin: new Date(REF_TIME - lastLoginDays * DAY_MS).toISOString(),
+    createdAt: new Date(REF_TIME - createdAtDays * DAY_MS).toISOString(),
+    priority,
+    department,
+    notes: notes ?? undefined,
+  };
+}
+
+const TOTAL = 1000;
+const generated: User[] = Array.from(
+  { length: TOTAL - seedUsers.length },
+  (_, i) => generateUser(i + seedUsers.length)
+);
+
+export const sampleUsers: User[] = [...seedUsers, ...generated];

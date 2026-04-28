@@ -143,9 +143,13 @@ function App() {
     }
   };
 
-  const [serverData, setServerData] = useState(sampleUsers.slice(0, 5));
+  const DEFAULT_PAGE_SIZE = 25;
+  const PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
+  const GRID_MAX_HEIGHT = 560;
+
+  const [serverData, setServerData] = useState(sampleUsers.slice(0, DEFAULT_PAGE_SIZE));
   const [totalCount, setTotalCount] = useState(sampleUsers.length);
-  const [pageCount, setPageCount] = useState(Math.ceil(sampleUsers.length / 5));
+  const [pageCount, setPageCount] = useState(Math.ceil(sampleUsers.length / DEFAULT_PAGE_SIZE));
   const [isLoading, setIsLoading] = useState(false);
   const [clientData, setClientData] = useState(sampleUsers);
 
@@ -236,15 +240,15 @@ function App() {
   useEffect(() => {
     if (isServerSide) {
       handleDataChange({
-        pagination: { pageIndex: 0, pageSize: 5 },
+        pagination: { pageIndex: 0, pageSize: DEFAULT_PAGE_SIZE },
         sorting: [],
         filters: [],
         globalFilter: '',
       });
     } else {
-      setServerData(sampleUsers.slice(0, 5));
+      setServerData(sampleUsers.slice(0, DEFAULT_PAGE_SIZE));
       setTotalCount(sampleUsers.length);
-      setPageCount(Math.ceil(sampleUsers.length / 5));
+      setPageCount(Math.ceil(sampleUsers.length / DEFAULT_PAGE_SIZE));
       setIsLoading(false);
     }
   }, [isServerSide]);
@@ -744,8 +748,10 @@ function App() {
                   enableGlobalFilter={true}
                   enableColumnFilters={true}
                   enablePagination={true}
-                  pageSize={5}
-                  pageSizeOptions={[5, 10, 15, 25]}
+                  pageSize={DEFAULT_PAGE_SIZE}
+                  pageSizeOptions={PAGE_SIZE_OPTIONS}
+                  maxHeight={GRID_MAX_HEIGHT}
+                  enableVirtualization={!isServerSide}
                   enableCellEditing={true}
                   defaultEditMode="click"
                   onCellEdit={handleCellEdit}

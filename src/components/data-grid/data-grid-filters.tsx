@@ -5,8 +5,8 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -118,28 +118,30 @@ export function DataGridFilters({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end' className='w-[180px]'>
-            <DropdownMenuLabel>{labels.toggleColumns}</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {table
-              .getAllLeafColumns()
-              .filter((column) => !isMetaColumn(column.id) && column.getCanHide())
-              .map((column) => {
-                const isVisible = column.getIsVisible();
-                const headerLabel =
-                  typeof column.columnDef.header === 'string' ? column.columnDef.header : column.id;
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className='capitalize'
-                    checked={isVisible}
-                    onCheckedChange={(value) => column.toggleVisibility(Boolean(value))}>
-                    <div className='flex items-center space-x-2'>
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>{labels.toggleColumns}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {table
+                .getAllLeafColumns()
+                .filter((column) => !isMetaColumn(column.id) && column.getCanHide())
+                .map((column) => {
+                  const isVisible = column.getIsVisible();
+                  const headerLabel =
+                    typeof column.columnDef.header === 'string' ? column.columnDef.header : column.id;
+                  return (
+                    <DropdownMenuItem
+                      key={column.id}
+                      closeOnClick={false}
+                      role='menuitemcheckbox'
+                      aria-checked={isVisible}
+                      onClick={() => column.toggleVisibility(!isVisible)}
+                      className={cn('capitalize', !isVisible && 'text-muted-foreground')}>
                       {isVisible ? <Eye className='h-4 w-4' /> : <EyeOff className='h-4 w-4' />}
                       <span>{headerLabel}</span>
-                    </div>
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
+                    </DropdownMenuItem>
+                  );
+                })}
+            </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

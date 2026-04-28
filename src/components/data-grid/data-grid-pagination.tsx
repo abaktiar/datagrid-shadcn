@@ -33,7 +33,7 @@ export function DataGridPagination({ pageSizeOptions = [10, 20, 50, 100] }: Data
         <div className='flex items-center space-x-2'>
           <p className='text-sm font-medium'>{labels.rowsPerPage}</p>
           <Select value={pageSize.toString()} onValueChange={(value) => table.setPageSize(Number(value))}>
-            <SelectTrigger className='h-8 w-[70px]'>
+            <SelectTrigger className='h-8 w-[84px]'>
               <SelectValue placeholder={pageSize.toString()} />
             </SelectTrigger>
             <SelectContent side='top'>
