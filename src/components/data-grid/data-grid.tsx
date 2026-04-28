@@ -89,13 +89,9 @@ export function DataGrid<TData>({
         header: ({ table }: { table: Table<TData> }) => (
           <div className='flex items-center justify-center'>
             <Checkbox
-              checked={
-                table.getIsAllPageRowsSelected() ? true : table.getIsSomePageRowsSelected() ? 'indeterminate' : false
-              }
+              checked={table.getIsAllPageRowsSelected()}
+              indeterminate={table.getIsSomePageRowsSelected()}
               onCheckedChange={(checked) => {
-                if (checked === 'indeterminate') {
-                  return;
-                }
                 table.toggleAllPageRowsSelected(checked);
               }}
               aria-label='Select all rows'
@@ -108,9 +104,6 @@ export function DataGrid<TData>({
             <Checkbox
               checked={row.getIsSelected()}
               onCheckedChange={(checked) => {
-                if (checked === 'indeterminate') {
-                  return;
-                }
                 row.toggleSelected(checked);
               }}
               aria-label={`Select row ${row.index + 1}`}

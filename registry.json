@@ -9,6 +9,7 @@
       "title": "Data Grid",
       "description": "A feature-rich, composable data grid built with TanStack Table v8, shadcn/ui, and Tailwind CSS. Supports sorting, filtering, pagination, row selection, bulk actions, context menus, and inline cell editing with configurable behaviors.",
       "dependencies": [
+        "@base-ui/react",
         "@tanstack/react-table",
         "@tanstack/react-virtual",
         "lucide-react",

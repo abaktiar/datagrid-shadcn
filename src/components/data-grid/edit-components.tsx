@@ -194,8 +194,8 @@ export function SelectEditInput<TData>({
 }: SelectEditInputProps<TData>) {
   const [isOpen, setIsOpen] = useState(true);
 
-  const handleValueChange = (newValue: string) => {
-    onChange(newValue);
+  const handleValueChange = (newValue: string | null) => {
+    onChange(newValue ?? '');
     onSave();
     setIsOpen(false);
   };
